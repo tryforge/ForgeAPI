@@ -29,7 +29,7 @@ const url = __importStar(require("node:url"));
 const fs = __importStar(require("fs"));
 const node_path_1 = require("node:path");
 const ws_1 = require("ws");
-const isValidFile = (file) => file.endsWith('.js') || (file.endsWith('.ts') && !file.endsWith('.d.ts'));
+const isValidFile = (file) => file.endsWith('.js');
 class APICore {
     data = [];
     static server;

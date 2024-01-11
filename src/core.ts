@@ -26,7 +26,7 @@ export interface RouteOptions {
   handler: HandlerMethods;
   wsHandler?: wsHandler;
 }
-const isValidFile = (file: string) => file.endsWith('.js') || (file.endsWith('.ts') && !file.endsWith('.d.ts'))
+const isValidFile = (file: string) => file.endsWith('.js')
 
 export class APICore {
   private data: RouteOptions[] = []
@@ -60,7 +60,6 @@ export class APICore {
 
   public async load(dir: string){
     const root = __dirname, files = fs.readdirSync(join(root, dir))
-    
     for (const file of files){
       const stat = fs.lstatSync(join(root, dir, file))
       if (stat.isDirectory()) {

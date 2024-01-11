@@ -1,2 +1,28 @@
+import { ForgeClient, ForgeExtension } from 'forgescript';
 import { APICore } from './core';
-new APICore(3000).load('./routes')
+
+interface IForgeAPIOptions {
+    port: number
+}
+
+export class ForgeAPI extends ForgeExtension{
+    public static client: ForgeClient
+    public static server: APICore
+
+    name: string = 'ForgeAPI';
+    description: string = 'Powerful API to interact with your discord bot';
+    version: string = '0.0.1';
+
+    constructor(private readonly options: IForgeAPIOptions){
+        super()
+    }
+    
+    public init(client: ForgeClient): void {
+        const api = new APICore(this.options.port)
+        api.load('./routes')
+        ForgeAPI.server = api
+        ForgeAPI.client = client
+    }
+}
+
+
