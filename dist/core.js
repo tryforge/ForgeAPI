@@ -46,8 +46,7 @@ class APICore {
         };
         const wsReply = (ws, request) => {
             const path = url.parse(request.url ?? '/404', true);
-            const method = request.method;
-            const response = this.data.find(s => s.url == path.pathname && s.method.toString().toUpperCase().includes(method));
+            const response = this.data.find(s => s.url == path.pathname);
             if (!response || !response?.wsHandler)
                 ws.send('Invalid Endpoint');
             else
@@ -61,7 +60,7 @@ class APICore {
         server.listen(port);
     }
     async load(dir) {
-        const root = (0, node_path_1.join)(__dirname, '..'), files = fs.readdirSync((0, node_path_1.join)(root, dir));
+        const root = __dirname, files = fs.readdirSync((0, node_path_1.join)(root, dir));
         for (const file of files) {
             const stat = fs.lstatSync((0, node_path_1.join)(root, dir, file));
             if (stat.isDirectory()) {

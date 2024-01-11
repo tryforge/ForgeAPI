@@ -9,8 +9,15 @@ type _HTTPMethods = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTI
 'PROPFIND' | 'PROPPATCH' | 'MKCOL' | 'COPY' | 'MOVE' | 'LOCK' | 'UNLOCK' | 'TRACE' | 'SEARCH'
 
 export type HTTPMethods = Uppercase<_HTTPMethods> | Lowercase<_HTTPMethods>;
-export type HandlerMethods = (request: IncomingMessage, reply: ServerResponse<IncomingMessage>) => ServerResponse;
-export type wsHandler = (ws: WebSocket, request: IncomingMessage) => WebSocket;
+export type HandlerMethods = (
+  request: IncomingMessage,
+  reply: ServerResponse<IncomingMessage>
+) => void | Promise<void>;
+
+export type wsHandler = (
+  ws: WebSocket,
+  request: IncomingMessage
+) => void | Promise<void>;
 
 /* interfaces */
 export interface RouteOptions {
@@ -37,8 +44,7 @@ export class APICore {
 
     const wsReply = (ws: WebSocket, request: IncomingMessage) => {
       const path = url.parse(request.url ?? '/404', true)
-      const method = request.method as HTTPMethods
-      const response = this.data.find(s => s.url == path.pathname && s.method.toString().toUpperCase().includes(method))
+      const response = this.data.find(s => s.url == path.pathname)
       if(!response || !response?.wsHandler) ws.send('Invalid Endpoint');
       else return response.wsHandler(ws, request)
     }
@@ -53,7 +59,7 @@ export class APICore {
   }
 
   public async load(dir: string){
-    const root = join(__dirname, '..'), files = fs.readdirSync(join(root, dir))
+    const root = __dirname, files = fs.readdirSync(join(root, dir))
     
     for (const file of files){
       const stat = fs.lstatSync(join(root, dir, file))
