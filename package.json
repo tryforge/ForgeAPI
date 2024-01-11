@@ -1,0 +1,30 @@
+{
+    "name": "forgeapi",
+    "description": "Coming Soon",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "tsc && node ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tryforge/ForgeAPI.git"
+    },
+    "author": "aggelos007",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/tryforge/ForgeAPI/issues"
+    },
+    "homepage": "https://github.com/tryforge/ForgeAPI#readme",
+    "devDependencies": {
+        "@types/node": "^20.5.7",
+        "@types/pidusage": "^2.0.5",
+        "typedoc": "^0.25.0",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "forgescript": "github:tryforge/ForgeScript#dev",
+        "mkcert": "^3.2.0",
+        "pidusage": "^3.0.2"
+    }
+}
