@@ -5,6 +5,9 @@ exports.default = {
     method: "get",
     handler: function (request, reply) {
         reply.end('hi');
-    }
+    },
+    //wsHandler: function(ws, request){
+    //    ws.send('hello')
+    //}
 };
 //# sourceMappingURL=test.js.map

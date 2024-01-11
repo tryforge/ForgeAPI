@@ -1,4 +1,2 @@
-import { httpServer } from "./core";
-
-const server = new httpServer(3000)
-server.load('./routes')
+import { APICore } from './core';
+new APICore(3000).load('./routes')

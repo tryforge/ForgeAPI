@@ -25,6 +25,7 @@
     "dependencies": {
         "forgescript": "github:tryforge/ForgeScript#dev",
         "mkcert": "^3.2.0",
-        "pidusage": "^3.0.2"
+        "pidusage": "^3.0.2",
+        "ws": "^8.16.0"
     }
 }

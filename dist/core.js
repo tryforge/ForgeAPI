@@ -23,25 +23,41 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.httpServer = void 0;
+exports.APICore = void 0;
 const node_http_1 = require("node:http");
 const url = __importStar(require("node:url"));
 const fs = __importStar(require("fs"));
 const node_path_1 = require("node:path");
+const ws_1 = require("ws");
 const isValidFile = (file) => file.endsWith('.js') || (file.endsWith('.ts') && !file.endsWith('.d.ts'));
-class httpServer {
+class APICore {
     data = [];
+    static server;
+    static wss;
     constructor(port) {
-        const reply = (request, reply) => {
+        const httpReply = (request, reply) => {
             const path = url.parse(request.url ?? '/404', true);
             const method = request.method;
-            const response = this.data.filter(s => s.url == path.pathname && s.method.toString().toUpperCase().includes(method));
-            if (!response[0])
+            const response = this.data.find(s => s.url == path.pathname && s.method.toString().toUpperCase().includes(method));
+            if (!response)
                 reply.end(JSON.stringify({ status: 404, message: 'Endpoint Not Found' }));
             else
-                return response[0].handler(request, reply);
+                return response.handler(request, reply);
         };
-        const server = (0, node_http_1.createServer)(reply);
+        const wsReply = (ws, request) => {
+            const path = url.parse(request.url ?? '/404', true);
+            const method = request.method;
+            const response = this.data.find(s => s.url == path.pathname && s.method.toString().toUpperCase().includes(method));
+            if (!response || !response?.wsHandler)
+                ws.send('Invalid Endpoint');
+            else
+                return response.wsHandler(ws, request);
+        };
+        const server = (0, node_http_1.createServer)(httpReply);
+        const wss = new ws_1.WebSocketServer({ server: server });
+        wss.on('connection', wsReply);
+        APICore.server = server;
+        APICore.wss = wss;
         server.listen(port);
     }
     async load(dir) {
@@ -61,5 +77,5 @@ class httpServer {
         }
     }
 }
-exports.httpServer = httpServer;
-//# sourceMappingURL=httpServer.js.map
+exports.APICore = APICore;
+//# sourceMappingURL=core.js.map
