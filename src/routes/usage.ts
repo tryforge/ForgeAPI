@@ -7,16 +7,18 @@ async function getUsage(){
     return {
         cpu: stats.cpu,
         ram: stats.memory,
-        ping: ForgeAPI.client.ws.ping
+        ping: ForgeAPI.client.ws.ping,
+        uptime: ForgeAPI.client.uptime
     }
 }
+
 export default {
     url: '/usage',
     method: "get",
-    handler: async function (request, reply) {
+    handler: async function (_,reply) {
         reply.end(JSON.stringify(await getUsage()))
     },
-    wsHandler: async function(ws, request){
+    wsHandler: async function(ws){
         setInterval(async () => {
             ws.send(JSON.stringify(await getUsage()))
         },1000)

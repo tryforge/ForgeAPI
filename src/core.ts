@@ -35,18 +35,27 @@ export class APICore {
 
   constructor(port: number){
     const httpReply = (request: IncomingMessage, reply: ServerResponse) => {
-      const path = url.parse(request.url ?? '/404', true)
-      const method = request.method as HTTPMethods
-      const response = this.data.find(s => s.url == path.pathname && s.method.toString().toUpperCase().includes(method))
-      if(!response) reply.end(JSON.stringify({status: 404, message: 'Endpoint Not Found'}));
-      else return response.handler(request,reply)
+      const reqURL = request.url 
+      if(!reqURL) return;
+      const path = url.parse((reqURL?.endsWith('/') ? reqURL?.slice(0, -1) : reqURL), true)
+      const endpoints = this.data.filter(s => s.method.toString().toUpperCase().includes(request.method as HTTPMethods))
+      const response = endpoints.find(s => s.url == path.pathname)
+      const customId = endpoints.filter(s => s.url.includes(':') && s.url.split('/').find(s => path.pathname?.split('/').find(i => s == i))).find(s => path.pathname?.split('/').filter(i => s.url.split('/').indexOf(i)))
+      if(response) return response.handler(request,reply)
+      else if(customId) return customId.handler(request,reply)
+      else reply.end(JSON.stringify({status: 404, message: 'Endpoint Not Found'}));
     }
 
     const wsReply = (ws: WebSocket, request: IncomingMessage) => {
-      const path = url.parse(request.url ?? '/404', true)
-      const response = this.data.find(s => s.url == path.pathname)
-      if(!response || !response?.wsHandler) ws.send('Invalid Endpoint');
-      else return response.wsHandler(ws, request)
+      const reqURL = request.url 
+      if(!reqURL) return;
+      const path = url.parse((reqURL?.endsWith('/') ? reqURL.slice(0, -1) : reqURL), true)
+      const endpoints = this.data.filter(s => s.method.toString().toUpperCase().includes(request.method as HTTPMethods))
+      const response = endpoints.find(s => s.url == path.pathname)
+      const customId = endpoints.filter(s => s.url.includes(':') && s.url.split('/').find(s => path.pathname?.split('/').find(i => s == i))).find(s => path.pathname?.split('/').filter(i => s.url.split('/').indexOf(i)))
+      if(response && response.wsHandler) return response.wsHandler(ws, request)
+      else if(customId && customId.wsHandler) return customId.wsHandler(ws, request)
+      else ws.send(JSON.stringify({status: 404, message: 'Endpoint Not Found'}));
     }
     const server = createServer(httpReply)
     const wss = new WebSocketServer({ server: server });
