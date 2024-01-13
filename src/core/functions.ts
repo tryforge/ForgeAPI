@@ -3,11 +3,10 @@ import * as url from 'node:url';
 import { ForgeAPI, HTTPMethods } from ".";
 import { RouteOptions } from ".";
 
-const client = ForgeAPI.client
-
 export const isValidFile = (file: string) => file.endsWith('.js')
 
 export const httpReply = (request: IncomingMessage, reply: ServerResponse, data: RouteOptions[]) => {
+    const client = ForgeAPI.client
     const reqURL = request.url 
     if(!reqURL) return;
     const path = url.parse((reqURL?.endsWith('/') ? reqURL?.slice(0, -1) : reqURL), true)
@@ -21,6 +20,7 @@ export const httpReply = (request: IncomingMessage, reply: ServerResponse, data:
 }
 
 export const wsReply = (ws: WebSocket, request: IncomingMessage, data: RouteOptions[]) => {
+    const client = ForgeAPI.client
     const reqURL = request.url 
     if(!reqURL) return;
     const path = url.parse((reqURL?.endsWith('/') ? reqURL.slice(0, -1) : reqURL), true)

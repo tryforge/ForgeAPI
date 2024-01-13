@@ -26,10 +26,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.wsReply = exports.httpReply = exports.isValidFile = void 0;
 const url = __importStar(require("node:url"));
 const _1 = require(".");
-const client = _1.ForgeAPI.client;
 const isValidFile = (file) => file.endsWith('.js');
 exports.isValidFile = isValidFile;
 const httpReply = (request, reply, data) => {
+    const client = _1.ForgeAPI.client;
     const reqURL = request.url;
     if (!reqURL)
         return;
@@ -47,6 +47,7 @@ const httpReply = (request, reply, data) => {
 };
 exports.httpReply = httpReply;
 const wsReply = (ws, request, data) => {
+    const client = _1.ForgeAPI.client;
     const reqURL = request.url;
     if (!reqURL)
         return;
