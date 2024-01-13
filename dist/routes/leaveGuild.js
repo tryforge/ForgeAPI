@@ -24,19 +24,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const url = __importStar(require("node:url"));
-const __1 = require("..");
 exports.default = {
     url: '/:guildID/leave',
     method: "post",
-    handler: async function (request, reply) {
-        if (!request.url)
-            return reply.end(JSON.stringify({ message: "An error occured" }));
+    handler: async function (ctx) {
+        if (!ctx.request.url)
+            return ctx.reply.end(JSON.stringify({ message: "An error occured" }));
         ;
-        const guildId = url.parse(request.url).pathname?.split('/')[1];
-        const server = __1.ForgeAPI.client.guilds.cache.get(guildId ?? '');
+        const guildId = url.parse(ctx.request.url).pathname?.split('/')[1];
+        const server = ctx.client.guilds.cache.get(guildId ?? '');
         if (!server)
-            return reply.end(JSON.stringify({ message: "Invalid Server" }));
-        reply.end(JSON.stringify({ message: `Successfully left ${server.name}` }));
+            return ctx.reply.end(JSON.stringify({ message: "Invalid Server" }));
+        ctx.reply.end(JSON.stringify({ message: `Successfully left ${server.name}` }));
         server.leave();
     }
 };

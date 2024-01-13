@@ -1,26 +1,26 @@
-import { ForgeAPI } from "..";
-import { RouteOptions } from "../core"
+import { ForgeClient } from "forgescript";
+import { RouteOptions } from "..";
 import pidusage from 'pidusage';
 
-async function getUsage(){
+async function getUsage(client: ForgeClient){
     const stats = await pidusage(process.pid)
     return {
         cpu: stats.cpu,
         ram: stats.memory,
-        ping: ForgeAPI.client.ws.ping,
-        uptime: ForgeAPI.client.uptime
+        ping: client.ws.ping,
+        uptime: client.uptime
     }
 }
 
 export default {
     url: '/usage',
     method: "get",
-    handler: async function (_,reply) {
-        reply.end(JSON.stringify(await getUsage()))
+    handler: async function (ctx) {
+        ctx.reply.end(JSON.stringify(await getUsage(ctx.client)))
     },
-    wsHandler: async function(ws){
+    wsHandler: async function(ctx){
         setInterval(async () => {
-            ws.send(JSON.stringify(await getUsage()))
+            ctx.ws.send(JSON.stringify(await getUsage(ctx.client)))
         },1000)
     }
 } as RouteOptions

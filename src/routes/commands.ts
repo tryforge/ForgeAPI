@@ -1,10 +1,12 @@
-import { ForgeAPI } from "..";
-import { RouteOptions } from "../core"
+import { RouteOptions, ForgeAPI } from "..";
 
 export default {
     url: '/commands',
     method: "get",
-    handler: async function (_,reply) {
-        reply.end(JSON.stringify(ForgeAPI.client.commands.toArray().map(s=>{return s.data})))
+    handler: async function (ctx) {
+        ctx.reply.end(JSON.stringify(ForgeAPI.client.commands.toArray().map(s=>{return s.data})))
+    },
+    wsHandler: async function(ctx) {
+        ctx.ws.send
     }
 } as RouteOptions

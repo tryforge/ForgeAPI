@@ -3,26 +3,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const __1 = require("..");
 const pidusage_1 = __importDefault(require("pidusage"));
-async function getUsage() {
+async function getUsage(client) {
     const stats = await (0, pidusage_1.default)(process.pid);
     return {
         cpu: stats.cpu,
         ram: stats.memory,
-        ping: __1.ForgeAPI.client.ws.ping,
-        uptime: __1.ForgeAPI.client.uptime
+        ping: client.ws.ping,
+        uptime: client.uptime
     };
 }
 exports.default = {
     url: '/usage',
     method: "get",
-    handler: async function (_, reply) {
-        reply.end(JSON.stringify(await getUsage()));
+    handler: async function (ctx) {
+        ctx.reply.end(JSON.stringify(await getUsage(ctx.client)));
     },
-    wsHandler: async function (ws) {
+    wsHandler: async function (ctx) {
         setInterval(async () => {
-            ws.send(JSON.stringify(await getUsage()));
+            ctx.ws.send(JSON.stringify(await getUsage(ctx.client)));
         }, 1000);
     }
 };

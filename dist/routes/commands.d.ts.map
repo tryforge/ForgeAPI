@@ -1,1 +1,1 @@
-{"version":3,"file":"commands.d.ts","sourceRoot":"","sources":["../../src/routes/commands.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,YAAY,EAAE,MAAM,SAAS,CAAA;;AAEtC,wBAMiB"}
+{"version":3,"file":"commands.d.ts","sourceRoot":"","sources":["../../src/routes/commands.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAY,MAAM,IAAI,CAAC;;AAE5C,wBASiB"}
