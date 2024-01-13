@@ -2,7 +2,8 @@ import { ForgeClient, ForgeExtension } from 'forgescript';
 import { APICore } from './core';
 
 interface IForgeAPIOptions {
-    port: number
+    port: number;
+    load?: string;
 }
 
 export class ForgeAPI extends ForgeExtension{
@@ -22,7 +23,6 @@ export class ForgeAPI extends ForgeExtension{
         api.load('./routes')
         ForgeAPI.server = api
         ForgeAPI.client = client
+        if(this.options.load) api.load(this.options.load);
     }
 }
-
-

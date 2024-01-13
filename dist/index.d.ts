@@ -2,6 +2,7 @@ import { ForgeClient, ForgeExtension } from 'forgescript';
 import { APICore } from './core';
 interface IForgeAPIOptions {
     port: number;
+    load?: string;
 }
 export declare class ForgeAPI extends ForgeExtension {
     private readonly options;

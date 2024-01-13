@@ -19,6 +19,8 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         api.load('./routes');
         ForgeAPI.server = api;
         ForgeAPI.client = client;
+        if (this.options.load)
+            api.load(this.options.load);
     }
 }
 exports.ForgeAPI = ForgeAPI;
