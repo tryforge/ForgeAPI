@@ -23,14 +23,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.data = void 0;
 const url = __importStar(require("node:url"));
-exports.default = {
+exports.data = {
     url: '/:guildID/leave',
     method: "post",
     handler: async function (ctx) {
         if (!ctx.request.url)
             return ctx.reply.end(JSON.stringify({ message: "An error occured" }));
-        ;
         const guildId = url.parse(ctx.request.url).pathname?.split('/')[1];
         const server = ctx.client.guilds.cache.get(guildId ?? '');
         if (!server)

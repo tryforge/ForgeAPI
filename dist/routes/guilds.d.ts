@@ -1,4 +1,3 @@
 import { RouteOptions } from "..";
-declare const _default: RouteOptions;
-export default _default;
+export declare const data: RouteOptions;
 //# sourceMappingURL=guilds.d.ts.map

@@ -18,6 +18,6 @@ export class ForgeAPI extends ForgeExtension{
         api.load('./routes')
         ForgeAPI.server = api
         ForgeAPI.client = client
-        if(this.options.load) api.load(this.options.load);
+        if(this.options.load) api.load(this.options.load, true);
     }
 }

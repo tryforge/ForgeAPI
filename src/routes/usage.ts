@@ -12,7 +12,7 @@ async function getUsage(client: ForgeClient){
     }
 }
 
-export default {
+export const data = {
     url: '/usage',
     method: "get",
     handler: async function (ctx) {

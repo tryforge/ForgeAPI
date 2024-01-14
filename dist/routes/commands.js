@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.data = void 0;
 const __1 = require("..");
-exports.default = {
+exports.data = {
     url: '/commands',
     method: "get",
     handler: async function (ctx) {

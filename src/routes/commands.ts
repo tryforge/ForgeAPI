@@ -1,6 +1,6 @@
 import { RouteOptions, ForgeAPI } from "..";
 
-export default {
+export const data = {
     url: '/commands',
     method: "get",
     handler: async function (ctx) {

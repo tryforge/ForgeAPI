@@ -17,7 +17,7 @@ async function guilds(client: ForgeClient) {
     })))
 }
 
-export default {
+export const data = {
     url: '/guilds',
     method: "get",
     handler: async function (ctx) {

@@ -1,7 +1,8 @@
-import { createServer, Server } from "node:http";
-import * as fs from 'fs'
 import { join } from "node:path";
+import { cwd } from "node:process";
 import { WebSocketServer } from "ws";
+import { readdirSync, lstatSync } from 'fs'
+import { createServer, Server } from "node:http";
 import { httpReply, isValidFile, RouteOptions, wsReply } from ".";
 
 export class APICore {
@@ -19,14 +20,14 @@ export class APICore {
     server.listen(port)
   }
 
-  public async load(dir: string){
-    const root = join(__dirname, '..'), files = fs.readdirSync(join(root, dir))
+  public async load(dir: string, custom?: boolean){
+    const root = custom ? cwd() : join(__dirname, '..'), files = readdirSync(join(root, dir))
     for (const file of files){
-      const stat = fs.lstatSync(join(root, dir, file))
+      const stat = lstatSync(join(root, dir, file))
       if (stat.isDirectory()) {
         await this.load(join(dir, file))
       } else if (isValidFile(file)) {
-        const route = require(join(root, dir, file)).default as RouteOptions
+        const route = require(join(root, dir, file)).data as RouteOptions
         if (!route) continue
         console.log(
           'Endpoint loaded: "' + route.url + '"',

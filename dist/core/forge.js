@@ -20,7 +20,7 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         ForgeAPI.server = api;
         ForgeAPI.client = client;
         if (this.options.load)
-            api.load(this.options.load);
+            api.load(this.options.load, true);
     }
 }
 exports.ForgeAPI = ForgeAPI;

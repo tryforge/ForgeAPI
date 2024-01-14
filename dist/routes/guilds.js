@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.data = void 0;
 async function guilds(client) {
     return JSON.stringify(await Promise.all(client.guilds.cache.map(async (s) => {
         return {
@@ -15,7 +16,7 @@ async function guilds(client) {
         };
     })));
 }
-exports.default = {
+exports.data = {
     url: '/guilds',
     method: "get",
     handler: async function (ctx) {

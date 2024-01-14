@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.data = void 0;
 const pidusage_1 = __importDefault(require("pidusage"));
 async function getUsage(client) {
     const stats = await (0, pidusage_1.default)(process.pid);
@@ -13,7 +14,7 @@ async function getUsage(client) {
         uptime: client.uptime
     };
 }
-exports.default = {
+exports.data = {
     url: '/usage',
     method: "get",
     handler: async function (ctx) {
