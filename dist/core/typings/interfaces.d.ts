@@ -1,6 +1,7 @@
 import { HTTPMethods, HandlerContext, wsContext } from ".";
 export interface RouteOptions {
     method: HTTPMethods | HTTPMethods[];
+    auth?: boolean;
     url: string;
     handler: HandlerContext;
     wsHandler?: wsContext;
@@ -8,5 +9,6 @@ export interface RouteOptions {
 export interface IForgeAPIOptions {
     port: number;
     load?: string;
+    authorization?: string | string[];
 }
 //# sourceMappingURL=interfaces.d.ts.map

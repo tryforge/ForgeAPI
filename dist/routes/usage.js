@@ -17,6 +17,7 @@ async function getUsage(client) {
 exports.data = {
     url: '/usage',
     method: "get",
+    auth: true,
     handler: async function (ctx) {
         ctx.reply.end(JSON.stringify(await getUsage(ctx.client)));
     },

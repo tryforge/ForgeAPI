@@ -20,6 +20,7 @@ async function guilds(client: ForgeClient) {
 export const data = {
     url: '/guilds',
     method: "get",
+    auth: true,
     handler: async function (ctx) {
         ctx.reply.end(await guilds(ctx.client))
     },

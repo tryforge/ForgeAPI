@@ -5,6 +5,7 @@ const __1 = require("..");
 exports.data = {
     url: '/commands',
     method: "get",
+    auth: true,
     handler: async function (ctx) {
         ctx.reply.end(JSON.stringify(__1.ForgeAPI.client.commands.toArray().map(s => { return s.data; })));
     },

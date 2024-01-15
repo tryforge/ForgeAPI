@@ -7,6 +7,7 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
     options;
     static client;
     static server;
+    static auth;
     name = 'ForgeAPI';
     description = 'Powerful API to interact with your discord bot';
     version = '0.0.1';
@@ -19,6 +20,7 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         api.load('./routes');
         ForgeAPI.server = api;
         ForgeAPI.client = client;
+        ForgeAPI.auth = this.options.authorization;
         if (this.options.load)
             api.load(this.options.load, true);
     }

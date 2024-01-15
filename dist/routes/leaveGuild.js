@@ -28,6 +28,7 @@ const url = __importStar(require("node:url"));
 exports.data = {
     url: '/:guildID/leave',
     method: "post",
+    auth: true,
     handler: async function (ctx) {
         if (!ctx.request.url)
             return ctx.reply.end(JSON.stringify({ message: "An error occured" }));

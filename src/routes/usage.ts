@@ -15,6 +15,7 @@ async function getUsage(client: ForgeClient){
 export const data = {
     url: '/usage',
     method: "get",
+    auth: true,
     handler: async function (ctx) {
         ctx.reply.end(JSON.stringify(await getUsage(ctx.client)))
     },

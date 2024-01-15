@@ -4,6 +4,7 @@ export declare class ForgeAPI extends ForgeExtension {
     private readonly options;
     static client: ForgeClient;
     static server: APICore;
+    static auth: string | string[] | undefined;
     name: string;
     description: string;
     version: string;

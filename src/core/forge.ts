@@ -4,6 +4,7 @@ import { APICore, IForgeAPIOptions } from '.';
 export class ForgeAPI extends ForgeExtension{
     public static client: ForgeClient
     public static server: APICore
+    public static auth: string | string[] | undefined
 
     name: string = 'ForgeAPI';
     description: string = 'Powerful API to interact with your discord bot';
@@ -18,6 +19,7 @@ export class ForgeAPI extends ForgeExtension{
         api.load('./routes')
         ForgeAPI.server = api
         ForgeAPI.client = client
+        ForgeAPI.auth = this.options.authorization
         if(this.options.load) api.load(this.options.load, true);
     }
 }

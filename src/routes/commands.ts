@@ -3,6 +3,7 @@ import { RouteOptions, ForgeAPI } from "..";
 export const data = {
     url: '/commands',
     method: "get",
+    auth: true,
     handler: async function (ctx) {
         ctx.reply.end(JSON.stringify(ForgeAPI.client.commands.toArray().map(s=>{return s.data})))
     },
