@@ -1,6 +1,6 @@
 {
     "name": "forgeapi",
-    "description": "Coming Soon",
+    "description": "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.",
     "version": "0.0.1",
     "main": "dist/index.js",
     "scripts": {
