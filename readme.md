@@ -40,7 +40,7 @@ Note: if you add authorization you will have to assign in the headers
 ### Default
 | Endpoint | Method | Has WS |
 | --------  |-------| ------ |
-| `/usage`, | `GET` | yes |
+| `/usage` | `GET` | yes |
 | `/commands` | `GET` | yes |
 | `/guilds` | `GET` | yes |
 | `/{guild.id}/leave` | `POST` | no |
