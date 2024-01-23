@@ -1,19 +1,19 @@
 # ForgeAPI
 ForgeAPI, the best way to interact with your ForgeScript bot and it's server.
 
-[![forgeAPI](https://img.shields.io/github/package-json/v/tryforge/ForgeAPI/main?label=forgeapi&color=5c16d4)](https://github.com/tryforge/ForgeDB/)
+[![forge.api](https://img.shields.io/github/package-json/v/tryforge/ForgeAPI/main?label=forge.api&color=5c16d4)](https://github.com/tryforge/ForgeDB/)
 [![forgescript](https://img.shields.io/github/package-json/v/tryforge/ForgeScript/main?label=forgescript&color=5c16d4)](https://github.com/tryforge/ForgeScript/)
 [![Discord](https://img.shields.io/discord/739934735387721768?logo=discord)](https://discord.gg/hcJgjzPvqb)
 
 ## How to use
 Download this npm package:
 ```bash
-npm i forgeapi
+npm i forge.api
 ```
 
 Now, in your client initialization:
 ```ts
-const { ForgeAPI } = require("forgeapi")
+const { ForgeAPI } = require("forge.api")
 
 // I'll assume client, can be bot or anything else
 const client = new ForgeClient({
