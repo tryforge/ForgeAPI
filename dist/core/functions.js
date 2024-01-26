@@ -40,7 +40,6 @@ const isAuthorized = (req) => {
         return auth.some(s => s == req.headers.authorization);
 };
 const httpReply = (request, reply, data) => {
-    console.log(isAuthorized(request));
     const client = _1.ForgeAPI.client;
     const reqURL = request.url;
     if (!reqURL)

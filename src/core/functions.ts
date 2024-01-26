@@ -13,7 +13,6 @@ const isAuthorized = (req: IncomingMessage) => {
 }
 
 export const httpReply = (request: IncomingMessage, reply: ServerResponse, data: RouteOptions[]) => {
-    console.log(isAuthorized(request))
     const client = ForgeAPI.client
     const reqURL = request.url 
     if(!reqURL) return;
