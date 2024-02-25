@@ -46,7 +46,7 @@ const httpReply = (request, reply, data) => {
         return;
     const path = url.parse((reqURL?.endsWith('/') ? reqURL?.slice(0, -1) : reqURL), true);
     const endpoints = data.filter((s) => s.method.toString().toUpperCase().includes(request.method));
-    const response = endpoints.find(s => s.url == path.pathname);
+    const response = path.pathname == null ? endpoints.find(s => s.url == '/') : endpoints.find(s => s.url == path.pathname);
     const customId = endpoints.filter(s => s.url.includes(':') && s.url.split('/').find(s => path.pathname?.split('/').find(i => s == i))).find(s => path.pathname?.split('/').filter(i => s.url.split('/').indexOf(i)));
     if (response?.auth && !isAuthorized(request) || customId?.auth && !isAuthorized(request))
         return reply.end(JSON.stringify({ status: 403, message: 'Access Forbitten' }));
@@ -65,7 +65,7 @@ const wsReply = (ws, request, data) => {
     if (!reqURL)
         return;
     const path = url.parse((reqURL?.endsWith('/') ? reqURL.slice(0, -1) : reqURL), true);
-    const response = data.find(s => s.url == path.pathname);
+    const response = path.pathname == null ? data.find(s => s.url == '/') : data.find(s => s.url == path.pathname);
     const customId = data.filter(s => s.url.includes(':') && s.url.split('/').find(s => path.pathname?.split('/').find(i => s == i))).find(s => path.pathname?.split('/').filter(i => s.url.split('/').indexOf(i)));
     if (response?.auth && !isAuthorized(request) || customId?.auth && !isAuthorized(request))
         return ws.close(1014, 'Access Forbitten');
