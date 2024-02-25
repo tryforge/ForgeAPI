@@ -1,5 +1,5 @@
 {
-    "name": "forge.api",
+    "name": "@tryforge/forge.api",
     "description": "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.",
     "version": "0.1.0",
     "main": "dist/index.js",
