@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPI = void 0;
-const forgescript_1 = require("forgescript");
+const forgescript_1 = require("@tryforge/forgescript");
 const _1 = require(".");
 class ForgeAPI extends forgescript_1.ForgeExtension {
     options;

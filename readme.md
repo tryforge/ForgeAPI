@@ -1,19 +1,19 @@
 # ForgeAPI
 ForgeAPI, the best way to interact with your ForgeScript bot and it's server.
 
-[![forge.api](https://img.shields.io/github/package-json/v/tryforge/ForgeAPI/main?label=forge.api&color=5c16d4)](https://github.com/tryforge/ForgeDB/)
-[![forgescript](https://img.shields.io/github/package-json/v/tryforge/ForgeScript/main?label=forgescript&color=5c16d4)](https://github.com/tryforge/ForgeScript/)
+[![@tryforge/forge.api](https://img.shields.io/github/package-json/v/tryforge/ForgeAPI/main?label=@tryforge/forge.api&color=5c16d4)](https://github.com/tryforge/ForgeDB/)
+[![@tryforge/forgescript](https://img.shields.io/github/package-json/v/tryforge/ForgeScript/main?label=@tryforge/forgescript&color=5c16d4)](https://github.com/tryforge/ForgeScript/)
 [![Discord](https://img.shields.io/discord/739934735387721768?logo=discord)](https://discord.gg/hcJgjzPvqb)
 
 ## How to use
 Download this npm package:
 ```bash
-npm i forge.api
+npm i @tryforge/forge.api
 ```
 
 Now, in your client initialization:
 ```ts
-const { ForgeAPI } = require("forge.api")
+const { ForgeAPI } = require("@tryforge/forge.api")
 
 // I'll assume client, can be bot or anything else
 const client = new ForgeClient({
@@ -48,7 +48,7 @@ Note: if you add authorization you will have to assign in the headers
 ### Custom
 Now, in your client initialization:
 ```ts
-const { ForgeAPI } = require("forgeapi")
+const { ForgeAPI } = require("@tryforge/forge.api")
 
 // I'll assume client, can be bot or anything else
 const client = new ForgeClient({

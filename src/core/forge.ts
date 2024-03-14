@@ -1,4 +1,4 @@
-import { ForgeClient, ForgeExtension } from 'forgescript';
+import { ForgeClient, ForgeExtension } from '@tryforge/forgescript';
 import { APICore, IForgeAPIOptions } from '.';
 
 export class ForgeAPI extends ForgeExtension{
