@@ -7,6 +7,7 @@ const ws_1 = require("ws");
 const fs_1 = require("fs");
 const node_http_1 = require("node:http");
 const _1 = require(".");
+const logger_1 = require("./logger");
 class APICore {
     data = [];
     static server;
@@ -30,7 +31,7 @@ class APICore {
                 const route = require((0, node_path_1.join)(root, dir, file)).data;
                 if (!route)
                     continue;
-                console.log('Endpoint loaded: "' + route.url + '"', '>> Type: "' + route.method.toString().toUpperCase() + '"');
+                logger_1.Logger.log('INFO', `ForgeAPI | ${route.method.toString().toUpperCase()} Endpoint loaded: "${route.url}"`);
                 this.data.push(route);
             }
         }

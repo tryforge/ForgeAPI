@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { WebSocketServer } from "ws";
 import { Server } from "node:http";
 export declare class APICore {
