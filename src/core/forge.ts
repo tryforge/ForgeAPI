@@ -1,4 +1,4 @@
-import { ForgeClient, ForgeExtension } from 'forgescript';
+import { ForgeClient, ForgeExtension } from "@tryforge/forgescript";
 import { APICore, IForgeAPIOptions } from '.';
 
 export class ForgeAPI extends ForgeExtension{
@@ -13,7 +13,7 @@ export class ForgeAPI extends ForgeExtension{
     constructor(private readonly options: IForgeAPIOptions){
         super()
     }
-    
+
     public init(client: ForgeClient): void {
         const api = new APICore(this.options.port)
         api.load('./routes')
