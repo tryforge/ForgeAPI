@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { RouteOptions } from ".";
 import { IncomingMessage, ServerResponse } from "http";
 export declare const isValidFile: (file: string) => boolean;
