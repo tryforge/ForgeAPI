@@ -17,14 +17,15 @@ npm i forge.api
 Now, in your client initialization:
 
 ```ts
-const { ForgeAPI } = require("forge.api")
+const { ForgeAPI } = require("@tryforge/forge.api")
 
 // I'll assume client, can be bot or anything else
 const client = new ForgeClient({
     ...options // The options you currently have
     extensions: [
         new ForgeAPI({
-            port: number
+            port: number,
+            authType?: 'authorization' | 'ip' | 'custom',
             authorization?: string | string[]
         })
     ]
@@ -65,7 +66,9 @@ const client = new ForgeClient({
     extensions: [
         new ForgeAPI({
             port: number
-            load: string // Here add the path to load the custom endpoints
+            load: string
+            debug?: boolean
+            authType?: 'authorization' | 'ip' | 'custom';
             authorization?: string | string[]
         })
     ]
