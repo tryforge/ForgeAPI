@@ -31,7 +31,11 @@ const isAuthorized = (req: IncomingMessage): boolean => {
         `Client IP: ${getClientIP(req)}`
     );
 
-    if (!authType || authType === 'authorization') {
+    if (!authType) {
+        return true;
+    }
+
+    if (authType === 'authorization') {
         const authHeader = req.headers.authorization;
         if (authType === 'authorization') {
             if (!authHeader) return false;

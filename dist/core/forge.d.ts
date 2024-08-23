@@ -1,4 +1,4 @@
-import { ForgeClient, ForgeExtension } from '@tryforge/forgescript';
+import { ForgeClient, ForgeExtension } from "@tryforge/forgescript";
 import { APICore, IForgeAPIOptions } from '.';
 export declare class ForgeAPI extends ForgeExtension {
     private readonly options;

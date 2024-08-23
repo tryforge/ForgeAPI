@@ -43,7 +43,10 @@ const isAuthorized = (req) => {
     logger_1.Logger.log('DEBUG', `Auth Type: ${authType}`);
     logger_1.Logger.log('DEBUG', `Authorization: ${auth}`);
     logger_1.Logger.log('DEBUG', `Client IP: ${getClientIP(req)}`);
-    if (!authType || authType === 'authorization') {
+    if (!authType) {
+        return true;
+    }
+    if (authType === 'authorization') {
         const authHeader = req.headers.authorization;
         if (authType === 'authorization') {
             if (!authHeader)
