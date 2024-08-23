@@ -8,6 +8,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const Logger = {
     DateColor: chalk_1.default.green.bold,
     Colors: {
+        DEBUG: chalk_1.default.whiteBright.bold,
         INFO: chalk_1.default.cyan.bold,
         WARN: chalk_1.default.yellow.bold,
         ERROR: chalk_1.default.red.bold,

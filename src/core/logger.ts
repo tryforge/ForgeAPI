@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-type LogType = 'INFO' | 'WARN' | 'ERROR' | 'API' | 'MESSAGE';
+type LogType = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'API' | 'MESSAGE';
 
 interface LoggerInterface {
   DateColor: chalk.Chalk;
@@ -14,6 +14,7 @@ interface LoggerInterface {
 const Logger: LoggerInterface = {
   DateColor: chalk.green.bold,
   Colors: {
+    DEBUG: chalk.whiteBright.bold,
     INFO: chalk.cyan.bold,
     WARN: chalk.yellow.bold,
     ERROR: chalk.red.bold,

@@ -1,4 +1,4 @@
-import { ForgeClient } from "forgescript";
+import { ForgeClient } from "@tryforge/forgescript";
 import { RouteOptions } from "..";
 
 async function guilds(client: ForgeClient) {

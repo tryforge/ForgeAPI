@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-type LogType = 'INFO' | 'WARN' | 'ERROR' | 'API' | 'MESSAGE';
+type LogType = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'API' | 'MESSAGE';
 interface LoggerInterface {
     DateColor: chalk.Chalk;
     Colors: {

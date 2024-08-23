@@ -15,7 +15,7 @@ export class APICore {
     const server = createServer((req,res)=> {httpReply(req, res, this.data)})
     const wss = new WebSocketServer({ server: server });
     wss.on('connection', (ws, req) => {return wsReply(ws as unknown as WebSocket, req, this.data)})
-    
+
     APICore.server = server
     APICore.wss = wss
     server.listen(port)
@@ -33,7 +33,7 @@ export class APICore {
         Logger.log(
           'INFO',
           `ForgeAPI | ${route.method.toString().toUpperCase()} Endpoint loaded: "${route.url}"`
-      );
+        );
         this.data.push(route)
       }
     }

@@ -12,4 +12,5 @@ export interface IForgeAPIOptions {
     port: number;
     load?: string;
     authorization?: string | string[];
+    authType?: 'authorization' | 'ip';
 }
