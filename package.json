@@ -17,9 +17,10 @@
     },
     "homepage": "https://github.com/tryforge/ForgeAPI#readme",
     "devDependencies": {
-        "@tryforge/forgescript": "^1.4.0",
+        "@tryforge/forgescript": "github:tryforge/ForgeScript#dev",
         "@types/node": "^20.5.7",
         "@types/pidusage": "^2.0.5",
+        "@types/uuid": "^10.0.0",
         "typedoc": "^0.25.0",
         "typescript": "^5.2.2"
     },
