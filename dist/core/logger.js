@@ -15,7 +15,11 @@ const Logger = {
         API: chalk_1.default.whiteBright.bold,
         MESSAGE: chalk_1.default.cyan.bold,
     },
+    debug: false,
     log(type, message) {
+        if (type === 'DEBUG' && !this.debug) {
+            return;
+        }
         console.log(this.DateColor(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}]`), this.Colors[type](`[${type}]`), this.Colors.MESSAGE(message));
     },
 };

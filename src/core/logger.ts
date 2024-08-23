@@ -7,6 +7,7 @@ interface LoggerInterface {
   Colors: {
     [key in LogType]: chalk.Chalk;
   };
+  debug: boolean;
   log(type: LogType, message: string): void;
 }
 
@@ -21,7 +22,12 @@ const Logger: LoggerInterface = {
     API: chalk.whiteBright.bold,
     MESSAGE: chalk.cyan.bold,
   },
+  debug: false,
   log(type: LogType, message: string) {
+    if (type === 'DEBUG' && !this.debug) {
+      return;
+    }
+
     console.log(
       this.DateColor(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}]`),
       this.Colors[type](`[${type}]`),

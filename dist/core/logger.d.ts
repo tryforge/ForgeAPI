@@ -5,6 +5,7 @@ interface LoggerInterface {
     Colors: {
         [key in LogType]: chalk.Chalk;
     };
+    debug: boolean;
     log(type: LogType, message: string): void;
 }
 declare const Logger: LoggerInterface;

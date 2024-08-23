@@ -10,6 +10,7 @@ export interface IForgeAPIOptions {
     port: number;
     load?: string;
     authorization?: string | string[];
-    authType?: 'authorization' | 'ip';
+    authType?: 'authorization' | 'ip' | 'custom';
+    debug?: boolean;
 }
 //# sourceMappingURL=interfaces.d.ts.map
