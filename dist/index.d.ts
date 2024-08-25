@@ -1,21 +1,12 @@
 import { ForgeClient, ForgeExtension } from "@tryforge/forgescript";
-import { auth, RouteManager } from "./structures";
-interface IForgeAPIOptions {
-    port: number;
-    auth?: auth;
-}
+import { IRouteManagerOptions, RouteManager } from "./structures";
 export declare class ForgeAPI extends ForgeExtension {
-    private router;
+    router: RouteManager;
     ws: typeof this.router.app.ws;
-    routes: {
-        load: RouteManager['load'];
-        add: RouteManager['route'];
-    };
     name: string;
     description: string;
     version: string;
-    constructor(options: IForgeAPIOptions);
+    constructor(options: IRouteManagerOptions);
     init(client: ForgeClient): void;
 }
-export {};
 //# sourceMappingURL=index.d.ts.map

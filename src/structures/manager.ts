@@ -6,6 +6,7 @@ import { join } from "path";
 import { cwd } from "process";
 import { IncomingMessage } from "http";
 import jwt from "jsonwebtoken";
+import { Logger } from "./logger";
 
 export enum AuthType {
     None = 0,
@@ -20,9 +21,16 @@ export type auth = {
     bearer?: boolean;
 };
 
+export enum LogLevel {
+    None = 0,
+    Basic = 1,
+    Debug = 2
+}
+
 export interface IRouteManagerOptions { 
     port: number;
     auth?: auth;
+    logLevel?: LogLevel
 };
 
 const isValidFile = (file: string) => file.endsWith('.js');
@@ -65,7 +73,7 @@ export class RouteManager {
 
     public init(client: ForgeClient) {
         this.client = client
-        if(this.config.auth?.bearer) console.log("Your Bearer Token: ",this.generateBearer(client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code: this.config.auth?.code?.[0] ?? "tryforge"));
+        if(this.config.auth?.bearer) Logger.log("INFO", "Your Bearer Token:",this.generateBearer(client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code: this.config.auth?.code?.[0] ?? "tryforge"));
     };
 
     public load(dir: string){
@@ -73,7 +81,7 @@ export class RouteManager {
         files = readdirSync(join(root, dir));
         for (const file of files){
             const stat = lstatSync(join(root, dir, file));
-            
+
             if(stat.isDirectory()) this.load(join(dir, file));
             else if(isValidFile(file)){
                 const data: RouteOptions = require(join(root, dir, file));
@@ -112,7 +120,22 @@ export class RouteManager {
         const allowedIPs = this.config.auth?.ip
         if(!allowedIPs) return undefined;
         const ipArray = Array.isArray(allowedIPs) ? allowedIPs : [allowedIPs]
-        return ipArray.includes(req.ip || "")
+        return ipArray.some(ip => this.normalizeIp(ip) == req.ip || "")
+    }
+
+    private normalizeIp(ip: string): string {
+        const ipv4Regex = /^(?:\d{1,3}\.){3}\d{1,3}$/;
+        const ipv6Regex = /^(?:[a-fA-F0-9:]+:+)+[a-fA-F0-9]+$/;
+    
+        if (ipv4Regex.test(ip)) {
+            return `::ffff:${ip}`;
+        }
+    
+        if (ipv6Regex.test(ip)) {
+            return ip;
+        }
+    
+        throw Logger.log("ERROR", 'Invalid IP address(es) provided in config!');
     }
 
     private checkCode(req: Request): boolean | undefined {

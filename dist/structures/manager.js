@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RouteManager = exports.AuthType = void 0;
+exports.RouteManager = exports.LogLevel = exports.AuthType = void 0;
 const webserver_1 = require("@tryforge/webserver");
 const fs_1 = require("fs");
 const path_1 = require("path");
 const process_1 = require("process");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const logger_1 = require("./logger");
 var AuthType;
 (function (AuthType) {
     AuthType[AuthType["None"] = 0] = "None";
@@ -16,6 +17,12 @@ var AuthType;
     AuthType[AuthType["Full"] = 2] = "Full";
 })(AuthType || (exports.AuthType = AuthType = {}));
 ;
+var LogLevel;
+(function (LogLevel) {
+    LogLevel[LogLevel["None"] = 0] = "None";
+    LogLevel[LogLevel["Basic"] = 1] = "Basic";
+    LogLevel[LogLevel["Debug"] = 2] = "Debug";
+})(LogLevel || (exports.LogLevel = LogLevel = {}));
 ;
 const isValidFile = (file) => file.endsWith('.js');
 class RouteManager {
@@ -29,7 +36,7 @@ class RouteManager {
     init(client) {
         this.client = client;
         if (this.config.auth?.bearer)
-            console.log("Your Bearer Token: ", this.generateBearer(client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code : this.config.auth?.code?.[0] ?? "tryforge"));
+            logger_1.Logger.log("INFO", "Your Bearer Token:", this.generateBearer(client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code : this.config.auth?.code?.[0] ?? "tryforge"));
     }
     ;
     load(dir) {
@@ -80,7 +87,18 @@ class RouteManager {
         if (!allowedIPs)
             return undefined;
         const ipArray = Array.isArray(allowedIPs) ? allowedIPs : [allowedIPs];
-        return ipArray.includes(req.ip || "");
+        return ipArray.some(ip => this.normalizeIp(ip) == req.ip || "");
+    }
+    normalizeIp(ip) {
+        const ipv4Regex = /^(?:\d{1,3}\.){3}\d{1,3}$/;
+        const ipv6Regex = /^(?:[a-fA-F0-9:]+:+)+[a-fA-F0-9]+$/;
+        if (ipv4Regex.test(ip)) {
+            return `::ffff:${ip}`;
+        }
+        if (ipv6Regex.test(ip)) {
+            return ip;
+        }
+        throw logger_1.Logger.log("ERROR", 'Invalid IP address(es) provided in config!');
     }
     checkCode(req) {
         const authData = this.config.auth;

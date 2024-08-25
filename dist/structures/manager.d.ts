@@ -13,9 +13,15 @@ export type auth = {
     code?: string | string[];
     bearer?: boolean;
 };
+export declare enum LogLevel {
+    None = 0,
+    Basic = 1,
+    Debug = 2
+}
 export interface IRouteManagerOptions {
     port: number;
     auth?: auth;
+    logLevel?: LogLevel;
 }
 type RawHTTPMethods = "get" | "put" | "post" | "delete" | "patch" | "options" | "trace" | "connect";
 type HTTPMethods = Uppercase<RawHTTPMethods> | RawHTTPMethods;
@@ -48,6 +54,7 @@ export declare class RouteManager {
     route(options: RouteOptions): void;
     private isAuthed;
     private validIP;
+    private normalizeIp;
     private checkCode;
     private generateBearer;
     private checkBearer;
