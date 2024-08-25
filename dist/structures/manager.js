@@ -16,15 +16,20 @@ var AuthType;
     AuthType[AuthType["Full"] = 2] = "Full";
 })(AuthType || (exports.AuthType = AuthType = {}));
 ;
+;
 const isValidFile = (file) => file.endsWith('.js');
 class RouteManager {
     config;
     app;
+    client = undefined;
     constructor(config) {
         this.config = config;
         this.app = (0, webserver_1.app)(config.port);
+    }
+    init(client) {
+        this.client = client;
         if (this.config.auth?.bearer)
-            console.log("Your Bearer Token: ", this.generateBearer(this.config.client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code : this.config.auth?.code?.[0] ?? "tryforge"));
+            console.log("Your Bearer Token: ", this.generateBearer(client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code : this.config.auth?.code?.[0] ?? "tryforge"));
     }
     ;
     load(dir) {
@@ -49,55 +54,67 @@ class RouteManager {
                 if (auth && !this.isAuthed(req))
                     return res.status(403).json({ status: 403, message: "Access Forbidden" });
                 else
-                    handler({ client: this.config.client, req, res });
+                    handler({ client: this.client, req, res });
             });
         }
+        ;
     }
+    ;
     isAuthed(req) {
-        if (this.config.auth?.type == 0)
+        const authConfig = this.config.auth;
+        if (!authConfig)
             return true;
-        else if (this.config.auth?.type == 1) {
-            let { ip } = this.config.auth;
-            ip = typeof ip == "string" ? [ip] : ip;
-            return ip?.includes(req.ip ?? "") ? true : this.checkCode(req.headers.authorization ?? "");
+        const { type } = authConfig;
+        if (type === AuthType.None)
+            return true;
+        if (type === AuthType.Min) {
+            return (this.validIP(req) || this.checkCode(req)) ?? true;
         }
-        else if (this.config.auth?.type == 2) {
-            let { ip } = this.config.auth;
-            ip = typeof ip == "string" ? [ip] : ip;
-            if (ip)
-                return (ip.includes(req.ip ?? "") && this.checkCode(req.headers.authorization ?? ""));
-            else
-                return this.checkCode(req.headers.authorization ?? "");
+        else if (type === AuthType.Full) {
+            return (this.validIP(req) ?? true) && (this.checkCode(req) ?? true);
+        }
+        return false;
+    }
+    validIP(req) {
+        const allowedIPs = this.config.auth?.ip;
+        if (!allowedIPs)
+            return undefined;
+        const ipArray = Array.isArray(allowedIPs) ? allowedIPs : [allowedIPs];
+        return ipArray.includes(req.ip || "");
+    }
+    checkCode(req) {
+        const authData = this.config.auth;
+        if (!authData)
+            return undefined;
+        const token = req.headers.authorization || "";
+        if (this.config.auth?.bearer) {
+            const code = Array.isArray(this.config.auth?.code) ? this.config.auth?.code[0] : this.config.auth?.code ?? "";
+            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code);
+            if (checker === "Error")
+                return false;
+            return checker.id === this.client.user.id;
+        }
+        else if (this.config.auth?.code) {
+            const codes = Array.isArray(this.config.auth?.code) ? this.config.auth?.code : [this.config.auth?.code];
+            return codes.includes(token);
         }
         else
             return true;
     }
     generateBearer(id, key) {
-        jsonwebtoken_1.default.sign({ id }, key, {
+        return jsonwebtoken_1.default.sign({ id }, key, {
             noTimestamp: true,
         }).split(".").slice(1).join(".");
-        return;
     }
-    checkCode(token) {
-        if (this.config.auth?.bearer) {
-            const code = typeof this.config.auth?.code == "string" ? this.config.auth?.code : this.config.auth?.code?.[0] ?? "";
-            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code);
-            if (typeof checker == "string" && checker == "Error")
-                return false;
-            else
-                return checker.id == this.config.client.user.id;
-        }
-        else {
-            return typeof this.config.auth?.code == "string" ? this.config.auth?.code == token : this.config.auth?.code?.includes(token) ?? true;
-        }
-    }
+    ;
     checkBearer(token, key) {
         try {
-            return jsonwebtoken_1.default.verify("eyJhbGciOiJIUzI1NiIsInR5cCIIkpXVCJ9." + token, key);
+            return jsonwebtoken_1.default.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." + token, key);
         }
         catch (err) {
             return "Error";
         }
+        ;
     }
 }
 exports.RouteManager = RouteManager;

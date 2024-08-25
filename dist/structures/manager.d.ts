@@ -15,7 +15,6 @@ export type auth = {
 };
 export interface IRouteManagerOptions {
     port: number;
-    client: ForgeClient;
     auth?: auth;
 }
 type RawHTTPMethods = "get" | "put" | "post" | "delete" | "patch" | "options" | "trace" | "connect";
@@ -42,12 +41,15 @@ export type WsOptions = {
 export declare class RouteManager {
     private config;
     app: ReturnType<typeof app>;
+    private client?;
     constructor(config: IRouteManagerOptions);
+    init(client: ForgeClient): void;
     load(dir: string): void;
     route(options: RouteOptions): void;
     private isAuthed;
-    private generateBearer;
+    private validIP;
     private checkCode;
+    private generateBearer;
     private checkBearer;
 }
 export {};

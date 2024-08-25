@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPI = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
-const manager_1 = require("./structures/manager");
+const structures_1 = require("./structures");
 ;
 class ForgeAPI extends forgescript_1.ForgeExtension {
     options;
@@ -14,11 +14,29 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         super();
         this.options = options;
     }
+    ;
     init(client) {
-        this.router = new manager_1.RouteManager({ client, port: this.options.port });
-        console.log("hi");
+        this.router = new structures_1.RouteManager({ ...this.options });
+        client.once("ready", (cli) => {
+            this.router.init(cli);
+        });
     }
+    ;
     routes = {
+        load: (dir) => {
+            if (this.router)
+                this.router.load(dir);
+            else
+                this.routes.load(dir);
+        },
+        add: (data) => {
+            if (this.router)
+                this.router.route(data);
+            else
+                this.routes.add(data);
+        }
+    };
+    ws = {
         load: (dir) => {
             if (this.router)
                 this.router.load(dir);
@@ -34,4 +52,5 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
     };
 }
 exports.ForgeAPI = ForgeAPI;
+;
 //# sourceMappingURL=index.js.map
