@@ -91,7 +91,7 @@ export class RouteManager {
       else if(isValidFile(file)){
         const data: RouteOptions = require(join(root, dir, file));
         this.route(data);
-        if (this.config.logLevel === 1) {
+        if (this.config.logLevel === 2) {
           Logger.log("DEBUG", `Loaded route from file: ${file}`);
         }
 
@@ -104,12 +104,12 @@ export class RouteManager {
     if (typeof method === "string") {
       this.app[method.toLowerCase() as RawHTTPMethods](url, (req, res) => {
         if (auth && !this.isAuthed(req)) {
-          if (this.config.logLevel === 1) {
+          if (this.config.logLevel === 2) {
             Logger.log("DEBUG", `Access forbidden for URL: ${url}`);
           }
           return res.status(403).json({ status: 403, message: "Access Forbidden" });
         } else {
-          if (this.config.logLevel === 1) {
+          if (this.config.logLevel === 2) {
             Logger.log("DEBUG", `Handling request for URL: ${url}`);
           }
           handler({ client: this.client!, req, res });
@@ -176,13 +176,13 @@ export class RouteManager {
       const code = Array.isArray(this.config.auth?.code) ? this.config.auth?.code[0] : this.config.auth?.code ?? "";
       const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code);
       if (checker === "Error") {
-        if (this.config.logLevel === 1) {
+        if (this.config.logLevel === 2) {
           Logger.log("DEBUG", "Bearer token validation failed");
         }
         return false;
       }
       const result = checker.id === this.client!.user.id;
-      if (this.config.logLevel === 1) {
+      if (this.config.logLevel === 2) {
         Logger.log("DEBUG", `Bearer token validation result: ${result}`);
       }
       return result;

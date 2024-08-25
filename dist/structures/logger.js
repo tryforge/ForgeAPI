@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Logger = void 0;
 const chalk_1 = __importDefault(require("chalk"));
 exports.Logger = {
-    dateColor: chalk_1.default.greenBright,
+    dateColor: chalk_1.default.greenBright.bold,
     colors: {
         INFO: chalk_1.default.cyan.bold,
         WARN: chalk_1.default.yellow.bold,
@@ -14,7 +14,7 @@ exports.Logger = {
         DEBUG: chalk_1.default.whiteBright.bold
     },
     log(type, ...message) {
-        console.log(this.dateColor(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}]`), this.colors[type](`[${type}]`), message.join(" "));
+        console.log(this.dateColor(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}]`), this.colors[type](`[${type}]`), this.colors[type](message.join(" ")));
     }
 };
 //# sourceMappingURL=logger.js.map
