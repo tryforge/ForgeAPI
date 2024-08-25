@@ -5,51 +5,29 @@ const forgescript_1 = require("@tryforge/forgescript");
 const structures_1 = require("./structures");
 ;
 class ForgeAPI extends forgescript_1.ForgeExtension {
-    options;
     router;
+    ws;
+    routes;
     name = "ForgeAPI";
     description = "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.";
     version = "1.0.0";
     constructor(options) {
         super();
-        this.options = options;
+        this.router = new structures_1.RouteManager({ ...options });
+        this.routes = {
+            load: this.router.load,
+            add: this.router.route
+        };
+        this.ws = this.router.app.ws;
     }
     ;
     init(client) {
-        this.router = new structures_1.RouteManager({ ...this.options });
+        ;
         client.once("ready", (cli) => {
             this.router.init(cli);
         });
     }
     ;
-    routes = {
-        load: (dir) => {
-            if (this.router)
-                this.router.load(dir);
-            else
-                this.routes.load(dir);
-        },
-        add: (data) => {
-            if (this.router)
-                this.router.route(data);
-            else
-                this.routes.add(data);
-        }
-    };
-    ws = {
-        load: (dir) => {
-            if (this.router)
-                this.router.load(dir);
-            else
-                this.routes.load(dir);
-        },
-        add: (data) => {
-            if (this.router)
-                this.router.route(data);
-            else
-                this.routes.add(data);
-        }
-    };
 }
 exports.ForgeAPI = ForgeAPI;
 ;
