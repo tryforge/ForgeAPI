@@ -35,8 +35,12 @@ class RouteManager {
     }
     init(client) {
         this.client = client;
-        if (this.config.auth?.bearer)
+        if (this.config.auth?.bearer) {
             logger_1.Logger.log("INFO", "Your Bearer Token:", this.generateBearer(client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code : this.config.auth?.code?.[0] ?? "tryforge"));
+        }
+        if (this.config.logLevel === 2) {
+            logger_1.Logger.log("DEBUG", "RouteManager initialized.");
+        }
     }
     ;
     load(dir) {
@@ -48,6 +52,9 @@ class RouteManager {
             else if (isValidFile(file)) {
                 const data = require((0, path_1.join)(root, dir, file));
                 this.route(data);
+                if (this.config.logLevel === 1) {
+                    logger_1.Logger.log("DEBUG", `Loaded route from file: ${file}`);
+                }
             }
             ;
         }
@@ -56,15 +63,25 @@ class RouteManager {
     ;
     route(options) {
         const { url, auth, method, handler } = options;
-        if (typeof method == "string") {
+        if (typeof method === "string") {
             this.app[method.toLowerCase()](url, (req, res) => {
-                if (auth && !this.isAuthed(req))
+                if (auth && !this.isAuthed(req)) {
+                    if (this.config.logLevel === 1) {
+                        logger_1.Logger.log("DEBUG", `Access forbidden for URL: ${url}`);
+                    }
                     return res.status(403).json({ status: 403, message: "Access Forbidden" });
-                else
+                }
+                else {
+                    if (this.config.logLevel === 1) {
+                        logger_1.Logger.log("DEBUG", `Handling request for URL: ${url}`);
+                    }
                     handler({ client: this.client, req, res });
+                }
             });
+            if (this.config.logLevel === 2) {
+                logger_1.Logger.log("DEBUG", `Route registered for URL: ${url}`);
+            }
         }
-        ;
     }
     ;
     isAuthed(req) {
@@ -87,15 +104,25 @@ class RouteManager {
         if (!allowedIPs)
             return undefined;
         const ipArray = Array.isArray(allowedIPs) ? allowedIPs : [allowedIPs];
-        return ipArray.some(ip => this.normalizeIp(ip) == req.ip || "");
+        const result = ipArray.some(ip => this.normalizeIp(ip) == req.ip || "");
+        if (this.config.logLevel === 2) {
+            logger_1.Logger.log("DEBUG", `IP check result for ${req.ip}: ${result}`);
+        }
+        return result;
     }
     normalizeIp(ip) {
         const ipv4Regex = /^(?:\d{1,3}\.){3}\d{1,3}$/;
         const ipv6Regex = /^(?:[a-fA-F0-9:]+:+)+[a-fA-F0-9]+$/;
         if (ipv4Regex.test(ip)) {
+            if (this.config.logLevel === 2) {
+                logger_1.Logger.log("DEBUG", `IPv4 to IPv6: ${ip}`);
+            }
             return `::ffff:${ip}`;
         }
         if (ipv6Regex.test(ip)) {
+            if (this.config.logLevel === 2) {
+                logger_1.Logger.log("DEBUG", `Using IPv6: ${ip}`);
+            }
             return ip;
         }
         throw logger_1.Logger.log("ERROR", 'Invalid IP address(es) provided in config!');
@@ -108,31 +135,54 @@ class RouteManager {
         if (this.config.auth?.bearer) {
             const code = Array.isArray(this.config.auth?.code) ? this.config.auth?.code[0] : this.config.auth?.code ?? "";
             const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code);
-            if (checker === "Error")
+            if (checker === "Error") {
+                if (this.config.logLevel === 1) {
+                    logger_1.Logger.log("DEBUG", "Bearer token validation failed");
+                }
                 return false;
-            return checker.id === this.client.user.id;
+            }
+            const result = checker.id === this.client.user.id;
+            if (this.config.logLevel === 1) {
+                logger_1.Logger.log("DEBUG", `Bearer token validation result: ${result}`);
+            }
+            return result;
         }
         else if (this.config.auth?.code) {
             const codes = Array.isArray(this.config.auth?.code) ? this.config.auth?.code : [this.config.auth?.code];
-            return codes.includes(token);
+            const result = codes.includes(token);
+            if (this.config.logLevel === 2) {
+                logger_1.Logger.log("DEBUG", `Code validation result: ${result}`);
+            }
+            return result;
         }
-        else
+        else {
             return true;
+        }
     }
     generateBearer(id, key) {
-        return jsonwebtoken_1.default.sign({ id }, key, {
+        const token = jsonwebtoken_1.default.sign({ id }, key, {
             noTimestamp: true,
         }).split(".").slice(1).join(".");
+        if (this.config.logLevel === 2) {
+            logger_1.Logger.log("DEBUG", `Generated bearer token for ID: ${id}`);
+        }
+        return token;
     }
     ;
     checkBearer(token, key) {
         try {
-            return jsonwebtoken_1.default.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." + token, key);
+            const result = jsonwebtoken_1.default.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." + token, key);
+            if (this.config.logLevel === 2) {
+                logger_1.Logger.log("DEBUG", `Bearer token verificaton success`);
+            }
+            return result;
         }
         catch (err) {
+            if (this.config.logLevel === 2) {
+                logger_1.Logger.log("DEBUG", `Bearer token verification failed.`);
+            }
             return "Error";
         }
-        ;
     }
 }
 exports.RouteManager = RouteManager;
