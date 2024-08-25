@@ -61,6 +61,7 @@ export class RouteManager {
     
     constructor(private config: IRouteManagerOptions){
         this.app = app(config.port);
+        if(this.config.auth?.bearer) console.log("Your Bearer Token: ",this.generateBearer(this.config.client.user.id, typeof this.config.auth?.code == "string" ? this.config.auth?.code: this.config.auth?.code?.[0] ?? "tryforge"))
     };
 
     public load(dir: string){
