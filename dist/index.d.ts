@@ -1,5 +1,5 @@
 import { ForgeClient, ForgeExtension } from "@tryforge/forgescript";
-import { auth } from "./structures/manager";
+import { auth, RouteOptions } from "./structures/manager";
 interface IForgeAPIOptions {
     port: number;
     auth?: auth;
@@ -14,6 +14,7 @@ export declare class ForgeAPI extends ForgeExtension {
     init(client: ForgeClient): void;
     routes: {
         load: (dir: string) => void;
+        add: (data: RouteOptions) => void;
     };
 }
 export {};

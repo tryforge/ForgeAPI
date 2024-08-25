@@ -1,24 +1,18 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const payload = {
-    id: "705306248538488947",
-};
-const secret = "fsbetter";
-const token = jsonwebtoken_1.default.sign(payload, secret, {
-    noTimestamp: true,
-}).split(".").slice(1).join(".");
-console.log("Generated Token:", token);
-const a = jsonwebtoken_1.default.verify("eyJhbGciOiJIUzI1NiIsInR5cCIIkpXVCJ9." + token, secret, (err, decoded) => {
-    if (err) {
-        return console.log(err);
-    }
-    else {
-        return decoded;
-    }
-});
-console.log(a);
+__exportStar(require("./manager"), exports);
 //# sourceMappingURL=index.js.map

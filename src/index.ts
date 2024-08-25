@@ -1,5 +1,5 @@
 import { ForgeClient, ForgeExtension } from "@tryforge/forgescript";
-import { auth, RouteManager } from "./structures/manager";
+import { auth, RouteManager, RouteOptions } from "./structures/manager";
 
 interface IForgeAPIOptions {
     port: number;
@@ -24,6 +24,10 @@ export class ForgeAPI extends ForgeExtension {
         load: (dir: string) => {
             if(this.router) this.router.load(dir)
                 else this.routes.load(dir)
+        },
+        add: (data: RouteOptions) => {
+            if(this.router) this.router.route(data)
+                else this.routes.add(data)
         }
     }
 }

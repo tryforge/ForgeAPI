@@ -24,6 +24,12 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
                 this.router.load(dir);
             else
                 this.routes.load(dir);
+        },
+        add: (data) => {
+            if (this.router)
+                this.router.route(data);
+            else
+                this.routes.add(data);
         }
     };
 }

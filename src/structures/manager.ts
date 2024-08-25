@@ -78,7 +78,7 @@ export class RouteManager {
         };
     };
 
-    private route(options:RouteOptions){
+    public route(options:RouteOptions){
         const { url, auth, method, handler } = options;
         if(typeof method == "string") {
             this.app[method.toLowerCase() as RawHTTPMethods](url, (req, res) => {

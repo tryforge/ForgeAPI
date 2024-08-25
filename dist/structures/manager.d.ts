@@ -44,7 +44,7 @@ export declare class RouteManager {
     app: ReturnType<typeof app>;
     constructor(config: IRouteManagerOptions);
     load(dir: string): void;
-    private route;
+    route(options: RouteOptions): void;
     private isAuthed;
     private generateBearer;
     private checkCode;
