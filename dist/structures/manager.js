@@ -34,7 +34,7 @@ class RouteManager {
             if (stat.isDirectory())
                 this.load((0, path_1.join)(dir, file));
             else if (isValidFile(file)) {
-                const data = require((0, path_1.join)(root, dir, file)).data;
+                const data = require((0, path_1.join)(root, dir, file));
                 this.route(data);
             }
             ;

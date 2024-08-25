@@ -7,7 +7,7 @@ interface IForgeAPIOptions {
 };
 
 export class ForgeAPI extends ForgeExtension {
-    private router!: RouteManager;
+    private router?: RouteManager;
 
     name: string = "ForgeAPI";
     description: string = "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.";
@@ -17,13 +17,13 @@ export class ForgeAPI extends ForgeExtension {
 
     init(client: ForgeClient): void {
         this.router = new RouteManager({client, port: this.options.port})
+        console.log("hi")
     }
 
     public routes = {
-        load: this.router.load
-    }
-
-    public ws = {
-        ...this.router.app.ws
+        load: (dir: string) => {
+            if(this.router) this.router.load(dir)
+                else this.routes.load(dir)
+        }
     }
 }

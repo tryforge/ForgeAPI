@@ -6,7 +6,7 @@ interface IForgeAPIOptions {
 }
 export declare class ForgeAPI extends ForgeExtension {
     private options;
-    private router;
+    private router?;
     name: string;
     description: string;
     version: string;
@@ -14,11 +14,6 @@ export declare class ForgeAPI extends ForgeExtension {
     init(client: ForgeClient): void;
     routes: {
         load: (dir: string) => void;
-    };
-    ws: {
-        options: import("ws").ServerOptions<typeof import("ws"), typeof import("http").IncomingMessage>;
-        path: string;
-        clients: Set<import("ws")>;
     };
 }
 export {};

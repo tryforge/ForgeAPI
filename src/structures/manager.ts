@@ -31,7 +31,7 @@ const isValidFile = (file: string) => file.endsWith('.js');
 type RawHTTPMethods = "get" | "put" | "post" | "delete" | "patch" | "options" | "trace" | "connect";
 type HTTPMethods = Uppercase<RawHTTPMethods> | RawHTTPMethods;
 
-type RouteOptions = {
+export type RouteOptions = {
     url: string;
     method: HTTPMethods | HTTPMethods[];
     auth?: boolean
@@ -44,7 +44,7 @@ type RouteOptions = {
     ) => Promise<void> | void;
 };
 
-type WsOptions = {
+export type WsOptions = {
     url?: string;
     auth?: boolean
     handler: (
@@ -72,7 +72,7 @@ export class RouteManager {
             
             if(stat.isDirectory()) this.load(join(dir, file));
             else if(isValidFile(file)){
-                const data: RouteOptions = require(join(root, dir, file)).data;
+                const data: RouteOptions = require(join(root, dir, file));
                 this.route(data)
             };
         };

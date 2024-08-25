@@ -16,12 +16,15 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
     }
     init(client) {
         this.router = new manager_1.RouteManager({ client, port: this.options.port });
+        console.log("hi");
     }
     routes = {
-        load: this.router.load
-    };
-    ws = {
-        ...this.router.app.ws
+        load: (dir) => {
+            if (this.router)
+                this.router.load(dir);
+            else
+                this.routes.load(dir);
+        }
     };
 }
 exports.ForgeAPI = ForgeAPI;
