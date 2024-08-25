@@ -91,10 +91,7 @@ export class RouteManager {
       else if(isValidFile(file)){
         const data: RouteOptions = require(join(root, dir, file));
         this.route(data);
-        if (this.config.logLevel === 2) {
-          Logger.log("DEBUG", `Loaded route from file: ${file}`);
-        }
-
+        Logger.log("INFO", `Loaded route from file: ${file}`);
       };
     };
   };

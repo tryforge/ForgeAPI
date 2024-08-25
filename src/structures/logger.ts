@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 export const Logger = {
-  dateColor: chalk.greenBright.bold,
+  dateColor: chalk.green.bold,
   colors: {
     INFO: chalk.cyan.bold,
     WARN: chalk.yellow.bold,

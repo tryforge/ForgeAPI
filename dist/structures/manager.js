@@ -52,9 +52,7 @@ class RouteManager {
             else if (isValidFile(file)) {
                 const data = require((0, path_1.join)(root, dir, file));
                 this.route(data);
-                if (this.config.logLevel === 2) {
-                    logger_1.Logger.log("DEBUG", `Loaded route from file: ${file}`);
-                }
+                logger_1.Logger.log("INFO", `Loaded route from file: ${file}`);
             }
             ;
         }
