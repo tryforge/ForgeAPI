@@ -2,7 +2,7 @@
 
 > this template shows main bot stats
 
-## Http reques
+## Http request
 
 ```http
 GET /botstats HTTP/1.1
