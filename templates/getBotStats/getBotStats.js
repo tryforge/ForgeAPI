@@ -3,6 +3,7 @@ module.exports = {
   method: "Get",
   auth: true,
   handler: async function (ctx) {
+    ctx.res.setHeader('Access-Control-Allow-Origin', '*');
     ctx.res.send(`{
       "client": {
         "name": "${ctx.client.user.username}",
