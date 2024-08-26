@@ -77,8 +77,6 @@ you can use this domain/endpoint for your api.
 
 ## Example Video
 
-![Demo GIF](/.assets/Hosting-On-Replit.gif)
-
 > Click [here] for a video preview
 
-[here]: /.assets/Hosting-On-Replit.webm
+[here]: https://cloud.lynnux.xyz/index.php/s/BZyLgp2JNStXj2x
