@@ -11,7 +11,7 @@ ForgeAPI, the best way to interact with your ForgeScript bot and it's server.
 **Download from npm:**
 
 ```bash
-npm install https://github.com/tryforge/ForgeAPI/
+npm i @tryforge/forge.api
 ```
 
 **in your client initialization:**
