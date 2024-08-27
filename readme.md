@@ -25,7 +25,7 @@ const api = new ForgeAPI({
   auth: {
     bearer?: boolean,
     type: number,
-    code?: string,
+    code?: string | string[],
     ip?: string | string[]
   }
 })
