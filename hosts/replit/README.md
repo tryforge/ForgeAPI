@@ -79,4 +79,4 @@ you can use this domain/endpoint for your api.
 
 > Click [here] for a video preview
 
-[here]: https://cloud.lynnux.xyz/index.php/s/BZyLgp2JNStXj2x
+[here]: https://youtu.be/muW2WK8PP_4
