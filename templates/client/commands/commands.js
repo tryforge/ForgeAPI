@@ -18,7 +18,7 @@ module.exports = {
     "paths": "${ctx.client.commands.paths}",
     "amount": "${messageCommandsCount}"
   },
-  "interactons": {
+  "interactions": {
     "list": ${JSON.stringify(interactonCommand, null, 2)},
     "paths": "${ctx.client.applicationCommands.path}",
     "amount": "${interactonCommandCount}"
