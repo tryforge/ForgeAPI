@@ -14,6 +14,8 @@ export class ForgeAPIRouteManager {
      */
     public addRoute(...routes: ForgeAPIRouteOptions[]) {
         for (const route of routes) {
+            route.data = {} // IBaseCommand compatibility issues.
+
             if (typeof route.handler === "string") {
                 route.compiled = {
                     name: Compiler.compile(route.url),

@@ -1,10 +1,10 @@
-import { BaseCommand, Logger, LogPriority, type ForgeClient } from "@tryforge/forgescript"
 import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager"
-import { ForgeAPIRouteOptions } from "./ForgeAPIRoute"
-import type { Express, Request } from "express"
+import { ForgeAPIRouteManager } from "../managers/ForgeAPIRouteManager"
+import { LogPriority, type ForgeClient } from "@tryforge/forgescript"
+import type { Express, Request, Response } from "express"
+import { InternalLogger } from "./InternalLogger"
 import { app } from "@tryforge/webserver"
 import { EventEmitter } from "events"
-import { ForgeAPIRouteManager } from "../managers/ForgeAPIRouteManager"
 
 /**
  * The events the server can emit.
@@ -17,7 +17,7 @@ export interface BackendServerEvents {
     /**
      * Emitted when a request is made.
      */
-    request: [req: Request]
+    request: [req: Request, res: Response]
     /**
      * Emitted when the backend server is ready.
      */
@@ -90,13 +90,20 @@ export class BackendServer extends EventEmitter<BackendServerEvents> {
         this.#app = app(options.port)
     }
 
+    /**
+     * Starts the ForgeAPI backend server.
+     * @param client - The ForgeClient instance.
+     * @returns {void}
+     */
     public init(client: ForgeClient) {
         this.#client = client
         this.#commands = new ForgeAPICommandManager(client)
 
         if (this.options.auth?.bearer) {
-            Logger.info(`Your Bearer Token: ${this}`)
+            InternalLogger.info(`Your Bearer Token: ${this}`)
         }
+
+        InternalLogger.debug(`${this.constructor.name} initialized.`)
     }
 
     /**

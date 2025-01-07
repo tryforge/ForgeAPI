@@ -61,6 +61,7 @@ export interface ForgeAPIRouteOptions {
     auth?: boolean
     handler: string | RouteHandlerExecutor
     compiled?: ICompiledCommand
+    [key: string]: unknown
 }
 
 /**
@@ -71,4 +72,5 @@ export interface ForgeAPIWebSocketOptions {
     auth?: boolean
     handler: string | WebSocketHandlerExecutor
     compiled?: ICompiledCommand
+    [key: string]: unknown
 }
