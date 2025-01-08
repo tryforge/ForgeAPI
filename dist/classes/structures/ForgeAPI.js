@@ -5,19 +5,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPI = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
-const ForgeAPICommandManager_1 = require("../managers/ForgeAPICommandManager");
 const BackendServer_1 = require("./BackendServer");
+const ForgeAPICommandManager_1 = require("../managers/ForgeAPICommandManager");
+const collectFiles_1 = require("../../utils/collectFiles");
 const InternalLogger_1 = require("./InternalLogger");
+const getVersion_1 = require("../../utils/getVersion");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const path_1 = require("path");
+/**
+ * Type-guard function to check if the given object is
+ * a ForgeAPI event.
+ * @param data - The object to check.
+ * @returns {data is BaseCommand<HTTPMethods>}
+ */
+function isEvent(data) {
+    return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "type")
+        && typeof data.type === "string" && Object.prototype.hasOwnProperty.call(data, "code")
+        && typeof data.code === "string";
+}
+/**
+ * Type-guard function to check whether the given
+ * object is a ForgeAPI route.
+ * @param data - The object to check.
+ * @returns {data is ForgeAPIRouteOptions}
+ */
+function isRoute(data) {
+    return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "url")
+        && typeof data.url === "string" && Object.prototype.hasOwnProperty.call(data, "method")
+        && typeof data.method === "string" && Object.prototype.hasOwnProperty.call(data, "handler")
+        && (typeof data.handler === "string" || typeof data.handler === "function");
+}
 /**
  * API integration for your ForgeScript client.
  */
 class ForgeAPI extends forgescript_1.ForgeExtension {
     options;
     name = "ForgeAPI";
-    description = "";
-    version = "";
+    description = "The best way to interact with your ForgeScript client and it's server.";
+    version = (0, getVersion_1.getVersion)();
     /**
      * The ForgeClient instance.
      */
@@ -82,6 +107,28 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         return this;
     }
     /**
+     * Load events and routes from the given directory.
+     * @param dir - The directory to load files from.
+     * @returns {void}
+     */
+    load(dir) {
+        const collectedFiles = (0, collectFiles_1.collectFiles)(dir).map(file => {
+            const content = require(file.dir);
+            if (content.default)
+                return content.default;
+            else
+                return content;
+        });
+        for (const file of collectedFiles) {
+            if (isRoute(file)) {
+                this.addRoutes(file);
+            }
+            else if (isEvent(file)) {
+                this.addEvents(file);
+            }
+        }
+    }
+    /**
      * Starts the ForgeAPI extension.
      * @param client - The ForgeClient instance to attach the extension to.
      * @returns {void}
@@ -95,6 +142,9 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
             forgescript_1.EventManager.load(ForgeAPICommandManager_1.handlerName, (0, path_1.join)(__dirname, "../../events"));
             client.events.load(ForgeAPICommandManager_1.handlerName, this.options.events);
         }
+        InternalLogger_1.InternalLogger.info("Your Bearer Token:", this.generateBearer(client.user.id, typeof this.options.auth?.code == "string"
+            ? this.options.auth?.code
+            : this.options.auth?.code?.[0] ?? "tryforge"));
         this.server.emit("ready");
     }
     /**

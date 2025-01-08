@@ -1,6 +1,6 @@
-import { ForgeAPIEventHandler } from "../classes/handlers/ForgeAPIEventHandler"
-import { ForgeAPI } from "../classes/structures/ForgeAPI"
+import { ForgeAPIEventHandler } from "@handlers/ForgeAPIEventHandler"
 import { Interpreter } from "@tryforge/forgescript"
+import { ForgeAPI } from "@structures/ForgeAPI"
 
 export default new ForgeAPIEventHandler({
     name: "ready",

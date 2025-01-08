@@ -1,6 +1,6 @@
-import type { BackendServerEvents } from "../structures/BackendServer"
+import type { BackendServerEvents } from "@structures/BackendServer"
 import { BaseEventHandler, ForgeClient } from "@tryforge/forgescript"
-import { ForgeAPI } from "../structures/ForgeAPI"
+import { ForgeAPI } from "@structures/ForgeAPI"
 
 /**
  * The ForgeAPI event handler.

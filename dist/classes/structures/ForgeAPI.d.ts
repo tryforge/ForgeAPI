@@ -1,6 +1,6 @@
 import { type ForgeClient, ForgeExtension } from "@tryforge/forgescript";
-import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager";
 import { BackendServer, IForgeAPISetupOptions } from "./BackendServer";
+import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager";
 import { ForgeAPIRouteOptions } from "./ForgeAPIRoute";
 /**
  * API integration for your ForgeScript client.
@@ -24,6 +24,12 @@ export declare class ForgeAPI extends ForgeExtension {
      * @returns {ForgeAPI}
      */
     addRoutes(...routes: ForgeAPIRouteOptions[]): this;
+    /**
+     * Load events and routes from the given directory.
+     * @param dir - The directory to load files from.
+     * @returns {void}
+     */
+    load(dir: string): void;
     /**
      * Starts the ForgeAPI extension.
      * @param client - The ForgeClient instance to attach the extension to.

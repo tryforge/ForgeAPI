@@ -1,5 +1,5 @@
-import { BaseCommandManager } from "@tryforge/forgescript";
 import type { BackendServerEvents } from "../structures/BackendServer";
+import { BaseCommandManager } from "@tryforge/forgescript";
 /**
  * Handler and provider name.
  */

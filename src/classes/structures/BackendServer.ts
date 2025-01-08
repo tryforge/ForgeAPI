@@ -1,5 +1,5 @@
-import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager"
-import { ForgeAPIRouteManager } from "../managers/ForgeAPIRouteManager"
+import { ForgeAPICommandManager } from "@managers/ForgeAPICommandManager"
+import { ForgeAPIRouteManager } from "@managers/ForgeAPIRouteManager"
 import { LogPriority, type ForgeClient } from "@tryforge/forgescript"
 import type { Express, Request, Response } from "express"
 import { InternalLogger } from "./InternalLogger"

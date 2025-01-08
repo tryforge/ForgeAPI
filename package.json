@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "main": "dist/index.js",
     "scripts": {
-        "test": "tsc && node dist/__tests__"
+        "test": "tsc && tsc-alias && node dist/__tests__"
     },
     "repository": {
         "type": "git",
@@ -22,6 +22,7 @@
         "@types/jsonwebtoken": "^9.0.6",
         "@types/node": "^22.10.5",
         "ts-node": "^10.9.2",
+        "tsc-alias": "^1.8.10",
         "typedoc": "^0.25.0",
         "typescript": "^5.2.2"
     },

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPIRouteManager = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
+const InternalLogger_1 = require("../structures/InternalLogger");
 /**
  * Class that handles every ForgeAPI route.
  */
@@ -14,6 +15,7 @@ class ForgeAPIRouteManager {
      */
     addRoute(...routes) {
         for (const route of routes) {
+            InternalLogger_1.InternalLogger.debug(`Adding route: "${route.url}" into the route manager.`);
             route.data = {}; // IBaseCommand compatibility issues.
             if (typeof route.handler === "string") {
                 route.compiled = {

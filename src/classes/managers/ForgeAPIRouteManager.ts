@@ -1,5 +1,6 @@
 import { Compiler } from "@tryforge/forgescript"
 import type { ForgeAPIRouteOptions  } from "../structures/ForgeAPIRoute"
+import { InternalLogger } from "../structures/InternalLogger"
 
 /**
  * Class that handles every ForgeAPI route.
@@ -14,6 +15,8 @@ export class ForgeAPIRouteManager {
      */
     public addRoute(...routes: ForgeAPIRouteOptions[]) {
         for (const route of routes) {
+            InternalLogger.debug(`Adding route: "${route.url}" into the route manager.`)
+            
             route.data = {} // IBaseCommand compatibility issues.
 
             if (typeof route.handler === "string") {

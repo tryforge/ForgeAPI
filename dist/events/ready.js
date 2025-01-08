@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ForgeAPIEventHandler_1 = require("../classes/handlers/ForgeAPIEventHandler");
-const ForgeAPI_1 = require("../classes/structures/ForgeAPI");
 const forgescript_1 = require("@tryforge/forgescript");
+const ForgeAPI_1 = require("../classes/structures/ForgeAPI");
 exports.default = new ForgeAPIEventHandler_1.ForgeAPIEventHandler({
     name: "ready",
     description: "Fired when ForgeAPI is ready.",
