@@ -13,10 +13,19 @@ exports.default = new forgescript_1.NativeFunction({
             type: forgescript_1.ArgType.Json,
             required: true,
             rest: false
+        },
+        {
+            name: "Status Code",
+            description: "The status code of the response.",
+            type: forgescript_1.ArgType.Number,
+            required: false,
+            rest: false
         }
     ],
-    async execute(_, [data]) {
+    async execute(_, [data, statusCode]) {
         const res = _.getEnvironmentKey("res");
+        if (statusCode)
+            res?.status(statusCode);
         res?.send(data);
         return this.success();
     }
