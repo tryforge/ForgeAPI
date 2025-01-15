@@ -6,9 +6,9 @@ export class ForgeAPI extends ForgeExtension {
 
   public ws: typeof this.router.app.ws;
 
-  name: string = "ForgeAPI";
+  name: string = "forge.api";
   description: string = "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.";
-  version: string = "1.0.0";
+  version: string = require("../package.json").version;
 
   constructor(options: IRouteManagerOptions){
     super();

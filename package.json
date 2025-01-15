@@ -1,7 +1,7 @@
 {
     "name": "@tryforge/forge.api",
     "description": "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "dist/index.js",
     "scripts": {
         "test": "tsc && node dist/__tests__"
@@ -25,7 +25,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@tryforge/webserver": "^1.0.1",
+        "@tryforge/webserver": "^1.0.2",
         "jsonwebtoken": "^9.0.2"
     }
 }
