@@ -6,9 +6,9 @@ const structures_1 = require("./structures");
 class ForgeAPI extends forgescript_1.ForgeExtension {
     router;
     ws;
-    name = "ForgeAPI";
+    name = "forge.api";
     description = "ForgeAPI, the best way to interact with your ForgeScript bot and it's server.";
-    version = "1.0.0";
+    version = require("../package.json").version;
     constructor(options) {
         super();
         this.router = new structures_1.RouteManager({ ...options });
