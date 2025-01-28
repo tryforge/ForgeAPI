@@ -1,7 +1,8 @@
 import { type ForgeClient, ForgeExtension } from "@tryforge/forgescript";
 import { BackendServer, IForgeAPISetupOptions } from "./BackendServer";
 import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager";
-import { ForgeAPIRouteOptions } from "./ForgeAPIRoute";
+import { ForgeAPIRouteOptions, ForgeAPIWebSocketOptions } from "./ForgeAPIRoute";
+import type { WebSocketServer } from "ws";
 /**
  * API integration for your ForgeScript client.
  */
@@ -24,6 +25,12 @@ export declare class ForgeAPI extends ForgeExtension {
      * @returns {ForgeAPI}
      */
     addRoutes(...routes: ForgeAPIRouteOptions[]): this;
+    /**
+     * Adds a listener for the websocket server.
+     * @param listeners - The listeners to be added.
+     * @returns {void}
+     */
+    addWebsocketListener(...listeners: ForgeAPIWebSocketOptions[]): this;
     /**
      * Load events and routes from the given directory.
      * @param dir - The directory to load files from.
@@ -79,6 +86,6 @@ export declare class ForgeAPI extends ForgeExtension {
     /**
      * Returns the websocket server of the ForgeAPI backend.
      */
-    get ws(): this['server']['app']['ws'];
+    get ws(): WebSocketServer;
 }
 //# sourceMappingURL=ForgeAPI.d.ts.map

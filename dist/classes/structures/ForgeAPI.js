@@ -35,6 +35,12 @@ function isRoute(data) {
         && typeof data.method === "string" && Object.prototype.hasOwnProperty.call(data, "handler")
         && (typeof data.handler === "string" || typeof data.handler === "function");
 }
+function isWebSocket(data) {
+    return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "name")
+        && typeof data.name === "string" && ["open", "close", "message", "error"].includes(data.name)
+        && Object.prototype.hasOwnProperty.call(data, "handler")
+        && (typeof data.handler === "string" || typeof data.handler === "function");
+}
 /**
  * API integration for your ForgeScript client.
  */
@@ -107,6 +113,40 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         return this;
     }
     /**
+     * Adds a listener for the websocket server.
+     * @param listeners - The listeners to be added.
+     * @returns {void}
+     */
+    addWebsocketListener(...listeners) {
+        this.server.websocketRoutes.addRoute(...listeners);
+        for (const route of listeners) {
+            const { handler, name } = route;
+            this.server.app.ws.on(name, (req) => {
+                InternalLogger_1.InternalLogger.debug(`Handling request for websocket URL: "${name}"`);
+                try {
+                    if (typeof handler === "string") {
+                        const compiled = this.server.websocketRoutes.getRoute(name);
+                        forgescript_1.Interpreter.run({
+                            obj: {},
+                            client: this.#client,
+                            command: compiled,
+                            data: compiled.compiled.code,
+                            environment: { req }
+                        });
+                    }
+                    else {
+                        handler({ client: this.#client, req, ws: this.server.app.ws });
+                    }
+                }
+                catch (err) {
+                    this.server.emit("error", err);
+                }
+            });
+            InternalLogger_1.InternalLogger.debug(`Websocket route with URL: "${name}" registered.`);
+        }
+        return this;
+    }
+    /**
      * Load events and routes from the given directory.
      * @param dir - The directory to load files from.
      * @returns {void}
@@ -119,13 +159,19 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
             else
                 return content;
         });
-        for (const file of collectedFiles) {
-            if (isRoute(file)) {
-                this.addRoutes(file);
-            }
-            else if (isEvent(file)) {
-                this.addEvents(file);
-            }
+        for (const data of collectedFiles) {
+            const values = Array.isArray(data) ? data : [data];
+            values.forEach((file) => {
+                if (isRoute(file)) {
+                    this.addRoutes(file);
+                }
+                else if (isEvent(file)) {
+                    this.addEvents(file);
+                }
+                else if (isWebSocket(file)) {
+                    this.addWebsocketListener(file);
+                }
+            });
         }
     }
     /**
@@ -142,10 +188,12 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
             forgescript_1.EventManager.load(ForgeAPICommandManager_1.handlerName, (0, path_1.join)(__dirname, "../../events"));
             client.events.load(ForgeAPICommandManager_1.handlerName, this.options.events);
         }
-        InternalLogger_1.InternalLogger.info("Your Bearer Token:", this.generateBearer(client.user.id, typeof this.options.auth?.code == "string"
-            ? this.options.auth?.code
-            : this.options.auth?.code?.[0] ?? "tryforge"));
-        this.server.emit("ready");
+        client.once("ready", (bot) => {
+            InternalLogger_1.InternalLogger.info("Your Bearer Token:", this.generateBearer(bot.user.id, typeof this.options.auth?.code == "string"
+                ? this.options.auth?.code
+                : this.options.auth?.code?.[0] ?? "tryforge"));
+            this.server.emit("ready");
+        });
     }
     /**
      * Check whether the given request is authed.

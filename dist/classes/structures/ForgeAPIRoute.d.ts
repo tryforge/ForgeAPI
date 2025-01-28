@@ -1,4 +1,5 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from "express";
+import type { WebsocketEvents } from "../handlers/ForgeAPIWebsocketEventHandler";
 import type { ForgeClient, ICompiledCommand } from "@tryforge/forgescript";
 import type { IncomingMessage } from "http";
 /**
@@ -52,7 +53,7 @@ export interface ForgeAPIRouteOptions {
  * A ForgeAPI websocket handler.
  */
 export interface ForgeAPIWebSocketOptions {
-    url?: string;
+    name: keyof WebsocketEvents;
     auth?: boolean;
     handler: string | WebSocketHandlerExecutor;
     compiled?: ICompiledCommand;

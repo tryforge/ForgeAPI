@@ -1,3 +1,4 @@
+import { ForgeAPIWebsocketManager } from "../managers/ForgeAPIWebsocketManager";
 import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager";
 import { ForgeAPIRouteManager } from "../managers/ForgeAPIRouteManager";
 import { LogPriority, type ForgeClient } from "@tryforge/forgescript";
@@ -95,5 +96,9 @@ export declare class BackendServer extends EventEmitter<BackendServerEvents> {
      * Returns the route manager.
      */
     get routes(): ForgeAPIRouteManager;
+    /**
+     * Returns the websocket route manager.
+     */
+    get websocketRoutes(): ForgeAPIWebsocketManager;
 }
 //# sourceMappingURL=BackendServer.d.ts.map

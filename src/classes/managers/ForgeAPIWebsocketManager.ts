@@ -1,32 +1,33 @@
-import type { ForgeAPIRouteOptions  } from "../structures/ForgeAPIRoute"
+import type { WebsocketEvents } from "@handlers/ForgeAPIWebsocketEventHandler"
+import { ForgeAPIWebSocketOptions } from "@structures/ForgeAPIRoute"
 import { InternalLogger } from "../structures/InternalLogger"
 import { Compiler } from "@tryforge/forgescript"
 
 /**
- * Class that handles every ForgeAPI route.
+ * Class that handles every ForgeAPI websocket event.
  */
-export class ForgeAPIRouteManager {
-    public cache = new Map<string, ForgeAPIRouteOptions>()
+export class ForgeAPIWebsocketManager {
+    public cache = new Map<keyof WebsocketEvents | string, ForgeAPIWebSocketOptions>()
 
     /**
      * Add routes into the manager.
      * @param routes - Routes to add.
      * @returns {ForgeAPIRouteManager}
      */
-    public addRoute(...routes: ForgeAPIRouteOptions[]) {
+    public addRoute(...routes: ForgeAPIWebSocketOptions[]) {
         for (const route of routes) {
-            InternalLogger.debug(`Adding route: "${route.url}" into the route manager.`)
+            InternalLogger.debug(`Adding websocket route: "${route.name}" into the route manager.`)
             
             route.data = {} // IBaseCommand compatibility issues.
 
             if (typeof route.handler === "string") {
                 route.compiled = {
-                    name: Compiler.compile(route.url),
+                    name: Compiler.compile(route.name),
                     code: Compiler.compile(route.handler)
                 }
             }
 
-            this.cache.set(route.url, route)
+            this.cache.set(route.name, route)
         }
         return this
     }
@@ -34,20 +35,20 @@ export class ForgeAPIRouteManager {
     /**
      * Get a route by name.
      * @param name - The name of the route to get.
-     * @returns {ForgeAPIRouteOptions | null}
+     * @returns {ForgeAPIWebSocketOptions | null}
      * @example
      * <ForgeAPIRouteManager>.getRoute('/hello')
      */
-    public getRoute(name: string): ForgeAPIRouteOptions | null
+    public getRoute(name: string): ForgeAPIWebSocketOptions | null
     /**
      * Get a route by matching the provided callback.
      * @param cb - The callback to match.
-     * @returns {ForgeAPIRouteOptions | null}
+     * @returns {ForgeAPIWebSocketOptions | null}
      * @example
      * <ForgeAPIRouteManager>.getRoute(r => r.url === '/hello')
      */
-    public getRoute(cb: (route: ForgeAPIRouteOptions) => boolean): ForgeAPIRouteOptions | null
-    public getRoute(nameOrCallback: string | ((route: ForgeAPIRouteOptions) => boolean)) {
+    public getRoute(cb: (route: ForgeAPIWebSocketOptions) => boolean): ForgeAPIWebSocketOptions | null
+    public getRoute(nameOrCallback: string | ((route: ForgeAPIWebSocketOptions) => boolean)) {
         if (typeof nameOrCallback === "string") {
             return this.cache.get(nameOrCallback) ?? null
         }

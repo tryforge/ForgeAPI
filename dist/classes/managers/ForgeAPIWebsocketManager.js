@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ForgeAPIRouteManager = void 0;
+exports.ForgeAPIWebsocketManager = void 0;
 const InternalLogger_1 = require("../structures/InternalLogger");
 const forgescript_1 = require("@tryforge/forgescript");
 /**
- * Class that handles every ForgeAPI route.
+ * Class that handles every ForgeAPI websocket event.
  */
-class ForgeAPIRouteManager {
+class ForgeAPIWebsocketManager {
     cache = new Map();
     /**
      * Add routes into the manager.
@@ -15,15 +15,15 @@ class ForgeAPIRouteManager {
      */
     addRoute(...routes) {
         for (const route of routes) {
-            InternalLogger_1.InternalLogger.debug(`Adding route: "${route.url}" into the route manager.`);
+            InternalLogger_1.InternalLogger.debug(`Adding websocket route: "${route.name}" into the route manager.`);
             route.data = {}; // IBaseCommand compatibility issues.
             if (typeof route.handler === "string") {
                 route.compiled = {
-                    name: forgescript_1.Compiler.compile(route.url),
+                    name: forgescript_1.Compiler.compile(route.name),
                     code: forgescript_1.Compiler.compile(route.handler)
                 };
             }
-            this.cache.set(route.url, route);
+            this.cache.set(route.name, route);
         }
         return this;
     }
@@ -35,5 +35,5 @@ class ForgeAPIRouteManager {
         return routes.find(nameOrCallback) ?? null;
     }
 }
-exports.ForgeAPIRouteManager = ForgeAPIRouteManager;
-//# sourceMappingURL=ForgeAPIRouteManager.js.map
+exports.ForgeAPIWebsocketManager = ForgeAPIWebsocketManager;
+//# sourceMappingURL=ForgeAPIWebsocketManager.js.map

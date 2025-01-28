@@ -1,3 +1,4 @@
+import { ForgeAPIWebsocketManager } from "@managers/ForgeAPIWebsocketManager"
 import { ForgeAPICommandManager } from "@managers/ForgeAPICommandManager"
 import { ForgeAPIRouteManager } from "@managers/ForgeAPIRouteManager"
 import { LogPriority, type ForgeClient } from "@tryforge/forgescript"
@@ -85,6 +86,7 @@ export class BackendServer extends EventEmitter<BackendServerEvents> {
     #commands: ForgeAPICommandManager | null = null
     #client: ForgeClient | null = null
     #routes: ForgeAPIRouteManager = new ForgeAPIRouteManager()
+    #ws_routes: ForgeAPIWebsocketManager = new ForgeAPIWebsocketManager()
     constructor(private options: IForgeAPISetupOptions) {
         super()
         this.#app = app(options.port)
@@ -125,5 +127,12 @@ export class BackendServer extends EventEmitter<BackendServerEvents> {
      */
     public get routes() {
         return this.#routes
+    }
+
+    /**
+     * Returns the websocket route manager.
+     */
+    public get websocketRoutes() {
+        return this.#ws_routes
     }
 }

@@ -2,12 +2,14 @@ import { BaseCommand, EventManager, type ForgeClient, ForgeExtension, Interprete
 import { AuthType, BackendServer, BackendServerEvents, IForgeAPISetupOptions } from "./BackendServer"
 import { ForgeAPICommandManager, handlerName } from "../managers/ForgeAPICommandManager"
 import type { Request as ExpressRequest, Response as ExpressResponse } from "express"
-import { ForgeAPIRouteOptions, RawHTTPMethods } from "./ForgeAPIRoute"
+import { ForgeAPIRouteOptions, ForgeAPIWebSocketOptions, RawHTTPMethods } from "./ForgeAPIRoute"
 import { collectFiles } from "@utils/collectFiles"
 import { InternalLogger } from "./InternalLogger"
 import { getVersion } from "@utils/getVersion"
+import type { WebSocketServer } from "ws"
 import jwt from "jsonwebtoken"
 import { join } from "path"
+import { IncomingMessage } from "http"
 
 /**
  * Type-guard function to check if the given object is
@@ -31,6 +33,13 @@ function isRoute(data: any): data is ForgeAPIRouteOptions {
     return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "url")
     && typeof data.url === "string" && Object.prototype.hasOwnProperty.call(data, "method")
     && typeof data.method === "string" && Object.prototype.hasOwnProperty.call(data, "handler")
+    && (typeof data.handler === "string" || typeof data.handler === "function")
+}
+
+function isWebSocket(data: any): data is ForgeAPIWebSocketOptions {
+    return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "name")
+    && typeof data.name === "string" && ["open", "close", "message", "error"].includes(data.name)
+    && Object.prototype.hasOwnProperty.call(data, "handler")
     && (typeof data.handler === "string" || typeof data.handler === "function")
 }
 
@@ -112,6 +121,42 @@ export class ForgeAPI extends ForgeExtension {
     }
 
     /**
+     * Adds a listener for the websocket server.
+     * @param listeners - The listeners to be added.
+     * @returns {void}
+     */
+    public addWebsocketListener(...listeners: ForgeAPIWebSocketOptions[]) {
+        this.server.websocketRoutes.addRoute(...listeners)
+
+        for (const route of listeners) {
+            const { handler, name } = route
+            this.server.app.ws.on(name, (req: IncomingMessage) => {
+                InternalLogger.debug(`Handling request for websocket URL: "${name}"`)
+                try {
+                    if (typeof handler === "string") {
+                        const compiled = this.server.websocketRoutes.getRoute(name)!
+                        Interpreter.run({
+                            obj: {},
+                            client: this.#client!,
+                            command: compiled as unknown as BaseCommand<any>,
+                            data: compiled.compiled!.code,
+                            environment: { req }
+                        })
+                    } else {
+                        handler({ client: this.#client!, req, ws: this.server.app.ws as unknown as WebSocket })
+                    }
+                } catch (err) {
+                    this.server.emit("error", err as Error)
+                }
+            })
+
+            InternalLogger.debug(`Websocket route with URL: "${name}" registered.`)
+        }
+
+        return this
+    }
+
+    /**
      * Load events and routes from the given directory.
      * @param dir - The directory to load files from.
      * @returns {void}
@@ -123,12 +168,17 @@ export class ForgeAPI extends ForgeExtension {
             else return content
         })
 
-        for (const file of collectedFiles) {
-            if (isRoute(file)) {
-                this.addRoutes(file)
-            } else if (isEvent(file)) {
-                this.addEvents(file)
-            }
+        for (const data of collectedFiles) {
+            const values = Array.isArray(data) ? data : [data]
+            values.forEach((file) => {
+                if (isRoute(file)) {
+                    this.addRoutes(file)
+                } else if (isEvent(file)) {
+                    this.addEvents(file)
+                } else if (isWebSocket(file)) {
+                    this.addWebsocketListener(file)
+                }
+            })
         }
     }
 
@@ -148,17 +198,19 @@ export class ForgeAPI extends ForgeExtension {
             client.events.load(handlerName, this.options.events)
         }
 
-        InternalLogger.info(
-            "Your Bearer Token:",
-            this.generateBearer(
-                client.user.id,
-                typeof this.options.auth?.code == "string"
-                    ? this.options.auth?.code 
-                    : this.options.auth?.code?.[0] ?? "tryforge"
-                )
-        )
+        client.once("ready", (bot) => {
+            InternalLogger.info(
+                "Your Bearer Token:",
+                this.generateBearer(
+                    bot.user.id,
+                    typeof this.options.auth?.code == "string"
+                        ? this.options.auth?.code 
+                        : this.options.auth?.code?.[0] ?? "tryforge"
+                    )
+            )
 
-        this.server.emit("ready")
+            this.server.emit("ready")
+        })
     }
 
     /**
@@ -301,7 +353,7 @@ export class ForgeAPI extends ForgeExtension {
     /**
      * Returns the websocket server of the ForgeAPI backend.
      */
-    public get ws(): this['server']['app']['ws'] {
+    public get ws(): WebSocketServer {
         return this.server.app.ws
     }
 }

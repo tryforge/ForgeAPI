@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BackendServer = exports.AuthType = void 0;
+const ForgeAPIWebsocketManager_1 = require("../managers/ForgeAPIWebsocketManager");
 const ForgeAPICommandManager_1 = require("../managers/ForgeAPICommandManager");
 const ForgeAPIRouteManager_1 = require("../managers/ForgeAPIRouteManager");
 const InternalLogger_1 = require("./InternalLogger");
@@ -24,6 +25,7 @@ class BackendServer extends events_1.EventEmitter {
     #commands = null;
     #client = null;
     #routes = new ForgeAPIRouteManager_1.ForgeAPIRouteManager();
+    #ws_routes = new ForgeAPIWebsocketManager_1.ForgeAPIWebsocketManager();
     constructor(options) {
         super();
         this.options = options;
@@ -59,6 +61,12 @@ class BackendServer extends events_1.EventEmitter {
      */
     get routes() {
         return this.#routes;
+    }
+    /**
+     * Returns the websocket route manager.
+     */
+    get websocketRoutes() {
+        return this.#ws_routes;
     }
 }
 exports.BackendServer = BackendServer;
