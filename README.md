@@ -6,7 +6,9 @@
 
 ## How to use forge api on your host?
 
-[replit.com]
+- [replit.com]
+- [Pterodactyl]
+- [locally]
 
 ## Template List
 
@@ -16,3 +18,5 @@
 [getBotStats]: ./templates/getBotStats/
 [leaveGuild]: ./templates/leaveGuild/
 [replit.com]: ./hosts/replit
+[locally]: ./hosts//localhost
+[Pterodactyl]: ./hosts/Pterodactyl
