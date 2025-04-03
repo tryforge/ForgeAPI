@@ -11,6 +11,12 @@
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
       "strict": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "paths": {
+        "@handlers/*": ["./src/classes/handlers/*"],
+        "@managers/*": ["./src/classes/managers/*"],
+        "@structures/*": ["./src/classes/structures/*"],
+        "@utils/*": ["./src/utils/*"],
+      }
     }
 }

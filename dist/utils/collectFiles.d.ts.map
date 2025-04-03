@@ -1,0 +1,1 @@
+{"version":3,"file":"collectFiles.d.ts","sourceRoot":"","sources":["../../src/utils/collectFiles.ts"],"names":[],"mappings":"AAGA;;;;GAIG;AACH,wBAAgB,YAAY,CAAC,GAAG,EAAE,MAAM,EAAE,SAAS,GAAE,IAAI,MAAM,EAAU,oBAqBxE;AAED;;GAEG;AACH,MAAM,WAAW,cAAc;IAC3B,IAAI,EAAE,MAAM,CAAA;IACZ,SAAS,EAAE,IAAI,MAAM,EAAE,CAAA;IACvB,GAAG,EAAE,MAAM,CAAA;CACd"}
