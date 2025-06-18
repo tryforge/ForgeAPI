@@ -6,8 +6,8 @@ export default new NativeFunction({
     description: "Retrieves the original URL the request.",
     unwrap: false,
     output: ArgType.String,
-    async execute(_) {
-        const req = _.getEnvironmentKey("req") as Request | undefined
+    async execute(ctx) {
+        const req = ctx.getEnvironmentKey("req") as Request
         return this.success(req?.originalUrl ?? "")
     }
 })

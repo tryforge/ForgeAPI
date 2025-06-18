@@ -15,8 +15,8 @@ export default new NativeFunction({
             rest: false
         }
     ],
-    async execute(_, [name]) {
-        const req = _.getEnvironmentKey("req") as Request | undefined
+    async execute(ctx, [name]) {
+        const req = ctx.getEnvironmentKey("req") as Request
         return this.success(req?.query[name] ?? "")
     }
 })

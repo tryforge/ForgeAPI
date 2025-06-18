@@ -22,8 +22,8 @@ export default new NativeFunction({
             rest: false
         }
     ],
-    async execute(_, [data, statusCode]) {
-        const res = _.getEnvironmentKey("res") as Response | undefined
+    async execute(ctx, [data, statusCode]) {
+        const res = ctx.getEnvironmentKey("res") as Response
         if (statusCode) res?.status(statusCode);
 
         res?.send(data)

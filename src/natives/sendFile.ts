@@ -22,8 +22,8 @@ export default new NativeFunction({
             rest: false
         }
     ],
-    async execute(_, [filePath, statusCode]) {
-        const res = _.getEnvironmentKey("res") as Response | undefined
+    async execute(ctx, [filePath, statusCode]) {
+        const res = ctx.getEnvironmentKey("res") as Response
         if (statusCode) res?.status(statusCode);
 
         res?.sendFile(filePath)

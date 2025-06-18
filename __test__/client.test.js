@@ -5,7 +5,7 @@ process.loadEnvFile()
 
 const api = new ForgeAPI({
     auth: {
-        type: AuthType.None,
+        type: AuthType.Min,
         code: process.env.API_CODE,
         bearer: true
     },
