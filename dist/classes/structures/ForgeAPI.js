@@ -183,7 +183,7 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         this.#client = client;
         this.#server = new BackendServer_1.BackendServer(this.options);
         this.#server.init(client);
-        this.load((0, path_1.join)(__dirname, "../../natives"));
+        forgescript_1.FunctionManager.load((0, path_1.join)(__dirname, "../../natives"));
         if (Array.isArray(this.options.events)) {
             forgescript_1.EventManager.load(ForgeAPICommandManager_1.handlerName, (0, path_1.join)(__dirname, "../../events"));
             client.events.load(ForgeAPICommandManager_1.handlerName, this.options.events);
@@ -207,10 +207,10 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         if (config.type === BackendServer_1.AuthType.None)
             return true;
         if (config.type === BackendServer_1.AuthType.Min) {
-            return (this.validIP(req) || this.checkCode(req)) ?? true;
+            return this.validIP(req) || this.checkCode(req);
         }
         else if (config.type === BackendServer_1.AuthType.Full) {
-            return (this.validIP(req) ?? true) && (this.checkCode(req) ?? true);
+            return this.validIP(req) && this.checkCode(req);
         }
         return false;
     }
@@ -221,13 +221,12 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
      * @returns {boolean}
      */
     validIP(req) {
-        const allowedIPs = this.options.auth?.ip?.length
-            ? Array.isArray(this.options.auth?.ip)
-                ? this.options.auth?.ip
-                : [this.options.auth.ip]
-            : [];
-        const result = allowedIPs.some(ip => this.normalizeIp(ip) === (req.ip ?? ""));
-        InternalLogger_1.InternalLogger.debug(`IP check result for "${req.ip}": ${result}`);
+        const allowedIPs = this.options.auth?.ip;
+        if (!allowedIPs)
+            return undefined;
+        const ipArray = Array.isArray(allowedIPs) ? allowedIPs : [allowedIPs];
+        const result = ipArray.some(ip => this.normalizeIp(ip) == req.ip || "");
+        InternalLogger_1.InternalLogger.debug(`IP check result for ${req.ip}: ${result}`);
         return result;
     }
     /**
@@ -249,10 +248,37 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         throw InternalLogger_1.InternalLogger.error('Invalid IP address(es) provided in config!');
     }
     checkCode(req) {
+        /*
+        const authData = this.options.auth
+        if (!authData) return undefined;
+
+        const token = req.headers.authorization ?? ""
+        if (this.options.auth?.bearer) {
+            const code = Array.isArray(this.options.auth?.code) ? this.options.auth?.code[0] : this.options.auth?.code ?? ""
+            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code)
+            if (checker === "Error") {
+                InternalLogger.debug("Bearer token validation failed")
+                return false
+            }
+
+            const result = checker.id === this.#client!.user.id
+            InternalLogger.debug(`Bearer token validation result: ${result}`)
+
+            return result
+        } else if (this.options.auth?.code) {
+            const codes = Array.isArray(this.options.auth?.code) ? this.options.auth?.code : [this.options.auth?.code]
+            const result = codes.includes(token)
+
+            InternalLogger.debug(`Code validation result: ${result}`)
+          
+            return result
+        } else {
+            return true
+        }*/
         const authData = this.options.auth;
         if (!authData)
             return undefined;
-        const token = req.headers.authorization ?? "";
+        const token = req.headers.authorization || "";
         if (this.options.auth?.bearer) {
             const code = Array.isArray(this.options.auth?.code) ? this.options.auth?.code[0] : this.options.auth?.code ?? "";
             const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code);

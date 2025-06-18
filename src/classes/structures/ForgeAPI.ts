@@ -1,4 +1,4 @@
-import { BaseCommand, EventManager, type ForgeClient, ForgeExtension, Interpreter } from "@tryforge/forgescript"
+import { BaseCommand, EventManager, type ForgeClient, ForgeExtension, FunctionManager, Interpreter } from "@tryforge/forgescript"
 import { AuthType, BackendServer, BackendServerEvents, IForgeAPISetupOptions } from "./BackendServer"
 import { ForgeAPICommandManager, handlerName } from "../managers/ForgeAPICommandManager"
 import type { Request as ExpressRequest, Response as ExpressResponse } from "express"
@@ -192,7 +192,8 @@ export class ForgeAPI extends ForgeExtension {
         this.#server = new BackendServer(this.options)
         this.#server.init(client)
 
-        this.load(join(__dirname, "../../natives"))
+        FunctionManager.load(join(__dirname, "../../natives"))
+
         if (Array.isArray(this.options.events)) {
             EventManager.load(handlerName, join(__dirname, "../../events"))
             client.events.load(handlerName, this.options.events)
@@ -224,9 +225,9 @@ export class ForgeAPI extends ForgeExtension {
 
         if (config.type === AuthType.None) return true;
         if (config.type === AuthType.Min) {
-            return (this.validIP(req) || this.checkCode(req)) ?? true
+            return this.validIP(req) || this.checkCode(req)
         } else if (config.type === AuthType.Full) {
-            return (this.validIP(req) ?? true) && (this.checkCode(req) ?? true)
+            return this.validIP(req) && this.checkCode(req)
         }
 
         return false
@@ -239,16 +240,15 @@ export class ForgeAPI extends ForgeExtension {
      * @returns {boolean}
      */
     private validIP(req: ExpressRequest) {
-        const allowedIPs = this.options.auth?.ip?.length
-            ? Array.isArray(this.options.auth?.ip)
-                ? this.options.auth?.ip
-                : [this.options.auth.ip]
-            : []
-        const result = allowedIPs.some(ip => this.normalizeIp(ip) === (req.ip ?? ""))
+        const allowedIPs = this.options.auth?.ip
+        if (!allowedIPs) return undefined;
 
-        InternalLogger.debug(`IP check result for "${req.ip}": ${result}`)
+        const ipArray = Array.isArray(allowedIPs) ? allowedIPs : [allowedIPs];
+        const result = ipArray.some(ip => this.normalizeIp(ip) == req.ip || "");
 
-        return result
+        InternalLogger.debug(`IP check result for ${req.ip}: ${result}`);
+
+        return result;
     }
 
     /**
@@ -273,32 +273,34 @@ export class ForgeAPI extends ForgeExtension {
         throw InternalLogger.error('Invalid IP address(es) provided in config!')
     }
 
-    private checkCode(req: ExpressRequest): boolean | undefined {
-        const authData = this.options.auth
+    private checkCode(req: ExpressRequest) {
+        const authData = this.options.auth;
         if (!authData) return undefined;
 
-        const token = req.headers.authorization ?? ""
+        const token = req.headers.authorization || "";
         if (this.options.auth?.bearer) {
-            const code = Array.isArray(this.options.auth?.code) ? this.options.auth?.code[0] : this.options.auth?.code ?? ""
-            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code)
+            const code = Array.isArray(this.options.auth?.code) ? this.options.auth?.code[0] : this.options.auth?.code ?? "";
+            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code);
+
             if (checker === "Error") {
-                InternalLogger.debug("Bearer token validation failed")
-                return false
+                InternalLogger.debug("Bearer token validation failed");
+                return false;
             }
 
-            const result = checker.id === this.#client!.user.id
-            InternalLogger.debug(`Bearer token validation result: ${result}`)
+            const result = checker.id === this.#client!.user.id;
 
-            return result
+            InternalLogger.debug(`Bearer token validation result: ${result}`);
+
+            return result;
         } else if (this.options.auth?.code) {
-            const codes = Array.isArray(this.options.auth?.code) ? this.options.auth?.code : [this.options.auth?.code]
-            const result = codes.includes(token)
+            const codes = Array.isArray(this.options.auth?.code) ? this.options.auth?.code : [this.options.auth?.code];
+            const result = codes.includes(token);
 
-            InternalLogger.debug(`Code validation result: ${result}`)
-          
-            return result
+            InternalLogger.debug(`Code validation result: ${result}`);
+
+            return result;
         } else {
-            return true
+            return true;
         }
     }
 

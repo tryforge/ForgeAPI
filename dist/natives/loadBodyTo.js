@@ -15,11 +15,11 @@ exports.default = new forgescript_1.NativeFunction({
             rest: false
         }
     ],
-    async execute(_, [name]) {
-        const req = _.getEnvironmentKey("req");
+    async execute(ctx, [name]) {
+        const req = ctx.getEnvironmentKey("req");
         if (!req?.body)
             return this.customError("No body found in the request.");
-        _.setEnvironmentKey(name, req.body);
+        ctx.setEnvironmentKey(name, req.body);
         return this.success();
     }
 });

@@ -15,8 +15,8 @@ exports.default = new forgescript_1.NativeFunction({
             rest: false
         }
     ],
-    async execute(_, [name]) {
-        const req = _.getEnvironmentKey("req");
+    async execute(ctx, [name]) {
+        const req = ctx.getEnvironmentKey("req");
         return this.success(req?.headers[name.toLowerCase()] ?? "");
     }
 });
