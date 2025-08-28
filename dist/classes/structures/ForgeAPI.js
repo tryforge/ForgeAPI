@@ -248,33 +248,6 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         throw InternalLogger_1.InternalLogger.error('Invalid IP address(es) provided in config!');
     }
     checkCode(req) {
-        /*
-        const authData = this.options.auth
-        if (!authData) return undefined;
-
-        const token = req.headers.authorization ?? ""
-        if (this.options.auth?.bearer) {
-            const code = Array.isArray(this.options.auth?.code) ? this.options.auth?.code[0] : this.options.auth?.code ?? ""
-            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code)
-            if (checker === "Error") {
-                InternalLogger.debug("Bearer token validation failed")
-                return false
-            }
-
-            const result = checker.id === this.#client!.user.id
-            InternalLogger.debug(`Bearer token validation result: ${result}`)
-
-            return result
-        } else if (this.options.auth?.code) {
-            const codes = Array.isArray(this.options.auth?.code) ? this.options.auth?.code : [this.options.auth?.code]
-            const result = codes.includes(token)
-
-            InternalLogger.debug(`Code validation result: ${result}`)
-          
-            return result
-        } else {
-            return true
-        }*/
         const authData = this.options.auth;
         if (!authData)
             return undefined;

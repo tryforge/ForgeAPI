@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { ForgeAPIWebsocketManager } from "../managers/ForgeAPIWebsocketManager";
 import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager";
 import { ForgeAPIRouteManager } from "../managers/ForgeAPIRouteManager";

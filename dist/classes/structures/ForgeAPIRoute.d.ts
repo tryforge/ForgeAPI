@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Request as ExpressRequest, Response as ExpressResponse } from "express";
 import type { WebsocketEvents } from "../handlers/ForgeAPIWebsocketEventHandler";
 import type { ForgeClient, ICompiledCommand } from "@tryforge/forgescript";

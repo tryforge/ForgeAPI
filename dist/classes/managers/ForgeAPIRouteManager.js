@@ -9,13 +9,20 @@ const forgescript_1 = require("@tryforge/forgescript");
 class ForgeAPIRouteManager {
     cache = new Map();
     /**
+     * Build a unique key for method+url.
+     */
+    makeKey(method, url) {
+        return `${method.toUpperCase()}:${url}`;
+    }
+    /**
      * Add routes into the manager.
      * @param routes - Routes to add.
      * @returns {ForgeAPIRouteManager}
      */
     addRoute(...routes) {
         for (const route of routes) {
-            InternalLogger_1.InternalLogger.debug(`Adding route: "${route.url}" into the route manager.`);
+            const method = route.method?.toUpperCase();
+            InternalLogger_1.InternalLogger.debug(`Adding route: [${method}] "${route.url}" into the route manager.`);
             route.data = {}; // IBaseCommand compatibility issues.
             if (typeof route.handler === "string") {
                 route.compiled = {
@@ -23,13 +30,13 @@ class ForgeAPIRouteManager {
                     code: forgescript_1.Compiler.compile(route.handler)
                 };
             }
-            this.cache.set(route.url, route);
+            this.cache.set(this.makeKey(method, route.url), route);
         }
         return this;
     }
-    getRoute(nameOrCallback) {
+    getRoute(nameOrCallback, method = "GET") {
         if (typeof nameOrCallback === "string") {
-            return this.cache.get(nameOrCallback) ?? null;
+            return this.cache.get(this.makeKey(method, nameOrCallback)) ?? null;
         }
         const routes = Array.from(this.cache.values());
         return routes.find(nameOrCallback) ?? null;

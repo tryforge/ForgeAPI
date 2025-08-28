@@ -1,9 +1,13 @@
-import type { ForgeAPIRouteOptions } from "../structures/ForgeAPIRoute";
+import type { ForgeAPIRouteOptions, HTTPMethods } from "../structures/ForgeAPIRoute";
 /**
  * Class that handles every ForgeAPI route.
  */
 export declare class ForgeAPIRouteManager {
     cache: Map<string, ForgeAPIRouteOptions>;
+    /**
+     * Build a unique key for method+url.
+     */
+    private makeKey;
     /**
      * Add routes into the manager.
      * @param routes - Routes to add.
@@ -11,13 +15,14 @@ export declare class ForgeAPIRouteManager {
      */
     addRoute(...routes: ForgeAPIRouteOptions[]): this;
     /**
-     * Get a route by name.
+     * Get a route by name+method.
      * @param name - The name of the route to get.
+     * @param method - The HTTP method (defaults to GET).
      * @returns {ForgeAPIRouteOptions | null}
      * @example
-     * <ForgeAPIRouteManager>.getRoute('/hello')
+     * <ForgeAPIRouteManager>.getRoute('/hello', 'GET')
      */
-    getRoute(name: string): ForgeAPIRouteOptions | null;
+    getRoute(name: string, method?: HTTPMethods): ForgeAPIRouteOptions | null;
     /**
      * Get a route by matching the provided callback.
      * @param cb - The callback to match.
