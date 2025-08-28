@@ -1,29 +1,34 @@
-import { ForgeAPIWebSocketOptions } from "../structures/ForgeAPIRoute";
+import { ForgeAPIWebSocketOptions, HTTPMethods } from "../structures/ForgeAPIRoute";
 /**
  * Class that handles every ForgeAPI websocket event.
  */
 export declare class ForgeAPIWebsocketManager {
     cache: Map<string, ForgeAPIWebSocketOptions>;
     /**
-     * Add routes into the manager.
+     * Build a unique cache key for method+name.
+     */
+    private makeKey;
+    /**
+     * Add websocket routes into the manager.
      * @param routes - Routes to add.
-     * @returns {ForgeAPIRouteManager}
+     * @returns {ForgeAPIWebsocketManager}
      */
     addRoute(...routes: ForgeAPIWebSocketOptions[]): this;
     /**
-     * Get a route by name.
+     * Get a websocket route by name and method.
      * @param name - The name of the route to get.
+     * @param method - The method of the route (defaults to GET).
      * @returns {ForgeAPIWebSocketOptions | null}
      * @example
-     * <ForgeAPIRouteManager>.getRoute('/hello')
+     * <ForgeAPIWebsocketManager>.getRoute('messageCreate', 'POST')
      */
-    getRoute(name: string): ForgeAPIWebSocketOptions | null;
+    getRoute(name: string, method?: HTTPMethods): ForgeAPIWebSocketOptions | null;
     /**
-     * Get a route by matching the provided callback.
+     * Get a websocket route by matching the provided callback.
      * @param cb - The callback to match.
      * @returns {ForgeAPIWebSocketOptions | null}
      * @example
-     * <ForgeAPIRouteManager>.getRoute(r => r.url === '/hello')
+     * <ForgeAPIWebsocketManager>.getRoute(r => r.name === 'ready')
      */
     getRoute(cb: (route: ForgeAPIWebSocketOptions) => boolean): ForgeAPIWebSocketOptions | null;
 }
