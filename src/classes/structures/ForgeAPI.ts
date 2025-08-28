@@ -19,8 +19,8 @@ import { IncomingMessage } from "http"
  */
 function isEvent(data: any): data is BaseCommand<keyof BackendServerEvents> {
     return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "type")
-    && typeof data.type === "string" && Object.prototype.hasOwnProperty.call(data, "code")
-    && typeof data.code === "string"
+        && typeof data.type === "string" && Object.prototype.hasOwnProperty.call(data, "code")
+        && typeof data.code === "string"
 }
 
 /**
@@ -31,16 +31,16 @@ function isEvent(data: any): data is BaseCommand<keyof BackendServerEvents> {
  */
 function isRoute(data: any): data is ForgeAPIRouteOptions {
     return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "url")
-    && typeof data.url === "string" && Object.prototype.hasOwnProperty.call(data, "method")
-    && typeof data.method === "string" && Object.prototype.hasOwnProperty.call(data, "handler")
-    && (typeof data.handler === "string" || typeof data.handler === "function")
+        && typeof data.url === "string" && Object.prototype.hasOwnProperty.call(data, "method")
+        && typeof data.method === "string" && Object.prototype.hasOwnProperty.call(data, "handler")
+        && (typeof data.handler === "string" || typeof data.handler === "function")
 }
 
 function isWebSocket(data: any): data is ForgeAPIWebSocketOptions {
     return typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "name")
-    && typeof data.name === "string" && ["open", "close", "message", "error"].includes(data.name)
-    && Object.prototype.hasOwnProperty.call(data, "handler")
-    && (typeof data.handler === "string" || typeof data.handler === "function")
+        && typeof data.name === "string" && ["open", "close", "message", "error"].includes(data.name)
+        && Object.prototype.hasOwnProperty.call(data, "handler")
+        && (typeof data.handler === "string" || typeof data.handler === "function")
 }
 
 /**
@@ -86,17 +86,19 @@ export class ForgeAPI extends ForgeExtension {
         this.server.routes.addRoute(...routes)
 
         for (const route of routes) {
-            const { auth, handler, method,url } = route
-            this.server.app[method.toLowerCase() as RawHTTPMethods](route.url, (req: ExpressRequest, res: ExpressResponse) => {
+            const { auth, handler, method, url } = route
+            const httpMethod = method.toUpperCase() as RawHTTPMethods
+
+            this.server.app[httpMethod.toLowerCase() as RawHTTPMethods](url, (req: ExpressRequest, res: ExpressResponse) => {
                 if (auth && !this.isAuthed(req)) {
                     InternalLogger.debug(`Access forbidden for URL: ${url}`)
                     return res.status(403).json({ status: 403, message: "Access Forbidden" })
                 }
 
-                InternalLogger.debug(`Handling request for URL: "${url}"`)
+                InternalLogger.debug(`Handling request for [${httpMethod}] URL: "${url}"`)
                 try {
                     if (typeof handler === "string") {
-                        const compiled = this.server.routes.getRoute(url)!
+                        const compiled = this.server.routes.getRoute(url, method)!
                         Interpreter.run({
                             obj: {},
                             client: this.#client!,
@@ -114,7 +116,7 @@ export class ForgeAPI extends ForgeExtension {
                 this.server.emit("request", req, res)
             })
 
-            InternalLogger.debug(`Route with URL: "${url}" registered.`)
+            InternalLogger.debug(`Route with [${httpMethod}] URL: "${url}" registered.`)
         }
 
         return this

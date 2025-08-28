@@ -1,4 +1,4 @@
-import type { ForgeAPIRouteOptions, HTTPMethods } from "../structures/ForgeAPIRoute"
+import type { ForgeAPIRouteOptions  } from "../structures/ForgeAPIRoute"
 import { InternalLogger } from "../structures/InternalLogger"
 import { Compiler } from "@tryforge/forgescript"
 
@@ -8,10 +8,10 @@ import { Compiler } from "@tryforge/forgescript"
 export class ForgeAPIRouteManager {
     public cache = new Map<string, ForgeAPIRouteOptions>()
 
-    /**
-     * Build a unique key for method+url.
+    /** 
+     * Build a unique cache key based on method + url.
      */
-    private makeKey(method: HTTPMethods, url: string): string {
+    private makeKey(method: string, url: string): string {
         return `${method.toUpperCase()}:${url}`
     }
 
@@ -22,12 +22,10 @@ export class ForgeAPIRouteManager {
      */
     public addRoute(...routes: ForgeAPIRouteOptions[]) {
         for (const route of routes) {
-            const method = route.method?.toUpperCase() as HTTPMethods
+            const method = route.method.toUpperCase()
 
-            InternalLogger.debug(
-                `Adding route: [${method}] "${route.url}" into the route manager.`
-            )
-
+            InternalLogger.debug(`Adding route: [${method}] "${route.url}" into the route manager.`)
+            
             route.data = {} // IBaseCommand compatibility issues.
 
             if (typeof route.handler === "string") {
@@ -43,14 +41,14 @@ export class ForgeAPIRouteManager {
     }
 
     /**
-     * Get a route by name+method.
-     * @param name - The name of the route to get.
+     * Get a route by url and method.
+     * @param url - The url of the route to get.
      * @param method - The HTTP method (defaults to GET).
      * @returns {ForgeAPIRouteOptions | null}
      * @example
-     * <ForgeAPIRouteManager>.getRoute('/hello', 'GET')
+     * <ForgeAPIRouteManager>.getRoute('/hello', 'POST')
      */
-    public getRoute(name: string, method?: HTTPMethods): ForgeAPIRouteOptions | null
+    public getRoute(url: string, method?: string): ForgeAPIRouteOptions | null
     /**
      * Get a route by matching the provided callback.
      * @param cb - The callback to match.
@@ -60,14 +58,14 @@ export class ForgeAPIRouteManager {
      */
     public getRoute(cb: (route: ForgeAPIRouteOptions) => boolean): ForgeAPIRouteOptions | null
     public getRoute(
-        nameOrCallback: string | ((route: ForgeAPIRouteOptions) => boolean),
-        method: HTTPMethods = "GET"
+        urlOrCallback: string | ((route: ForgeAPIRouteOptions) => boolean),
+        method: string = "GET"
     ) {
-        if (typeof nameOrCallback === "string") {
-            return this.cache.get(this.makeKey(method, nameOrCallback)) ?? null
+        if (typeof urlOrCallback === "string") {
+            return this.cache.get(this.makeKey(method, urlOrCallback)) ?? null
         }
 
         const routes = Array.from(this.cache.values())
-        return routes.find(nameOrCallback) ?? null
+        return routes.find(urlOrCallback) ?? null
     }
 }

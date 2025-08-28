@@ -82,15 +82,16 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         this.server.routes.addRoute(...routes);
         for (const route of routes) {
             const { auth, handler, method, url } = route;
-            this.server.app[method.toLowerCase()](route.url, (req, res) => {
+            const httpMethod = method.toUpperCase();
+            this.server.app[httpMethod.toLowerCase()](url, (req, res) => {
                 if (auth && !this.isAuthed(req)) {
                     InternalLogger_1.InternalLogger.debug(`Access forbidden for URL: ${url}`);
                     return res.status(403).json({ status: 403, message: "Access Forbidden" });
                 }
-                InternalLogger_1.InternalLogger.debug(`Handling request for URL: "${url}"`);
+                InternalLogger_1.InternalLogger.debug(`Handling request for [${httpMethod}] URL: "${url}"`);
                 try {
                     if (typeof handler === "string") {
-                        const compiled = this.server.routes.getRoute(url);
+                        const compiled = this.server.routes.getRoute(url, method);
                         forgescript_1.Interpreter.run({
                             obj: {},
                             client: this.#client,
@@ -108,7 +109,7 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
                 }
                 this.server.emit("request", req, res);
             });
-            InternalLogger_1.InternalLogger.debug(`Route with URL: "${url}" registered.`);
+            InternalLogger_1.InternalLogger.debug(`Route with [${httpMethod}] URL: "${url}" registered.`);
         }
         return this;
     }

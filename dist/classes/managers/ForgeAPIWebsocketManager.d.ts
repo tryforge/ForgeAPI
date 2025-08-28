@@ -5,7 +5,7 @@ import { ForgeAPIWebSocketOptions, HTTPMethods } from "../structures/ForgeAPIRou
 export declare class ForgeAPIWebsocketManager {
     cache: Map<string, ForgeAPIWebSocketOptions>;
     /**
-     * Build a unique cache key for method+name.
+     * Build a unique cache key for method + websocket name.
      */
     private makeKey;
     /**
@@ -15,9 +15,9 @@ export declare class ForgeAPIWebsocketManager {
      */
     addRoute(...routes: ForgeAPIWebSocketOptions[]): this;
     /**
-     * Get a websocket route by name and method.
+     * Get a websocket route by name + method.
      * @param name - The name of the route to get.
-     * @param method - The method of the route (defaults to GET).
+     * @param method - The method (defaults to GET).
      * @returns {ForgeAPIWebSocketOptions | null}
      * @example
      * <ForgeAPIWebsocketManager>.getRoute('messageCreate', 'POST')

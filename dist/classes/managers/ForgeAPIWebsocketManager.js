@@ -9,7 +9,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 class ForgeAPIWebsocketManager {
     cache = new Map();
     /**
-     * Build a unique cache key for method+name.
+     * Build a unique cache key for method + websocket name.
      */
     makeKey(method, name) {
         return `${method.toUpperCase()}:${name}`;
