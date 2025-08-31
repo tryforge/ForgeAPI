@@ -23,7 +23,7 @@ class ForgeAPIRouteManager {
                     code: forgescript_1.Compiler.compile(route.handler)
                 };
             }
-            this.cache.set(route.url, route);
+            this.cache.set(`[${route.method}]:(${route.url})`, route);
         }
         return this;
     }

@@ -26,7 +26,7 @@ export class ForgeAPIRouteManager {
                 }
             }
 
-            this.cache.set(route.url, route)
+            this.cache.set(`[${route.method}]:(${route.url})`, route)
         }
         return this
     }
