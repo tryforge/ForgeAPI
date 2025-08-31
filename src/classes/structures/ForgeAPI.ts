@@ -86,7 +86,7 @@ export class ForgeAPI extends ForgeExtension {
         this.server.routes.addRoute(...routes)
 
         for (const route of routes) {
-            const { auth, handler, method,url } = route
+            const { auth, handler, method, url } = route
             this.server.app[method.toLowerCase() as RawHTTPMethods](route.url, (req: ExpressRequest, res: ExpressResponse) => {
                 if (auth && !this.isAuthed(req)) {
                     InternalLogger.debug(`Access forbidden for URL: ${url}`)
@@ -96,7 +96,12 @@ export class ForgeAPI extends ForgeExtension {
                 InternalLogger.debug(`Handling request for URL: "${url}"`)
                 try {
                     if (typeof handler === "string") {
-                        const compiled = this.server.routes.getRoute(url)!
+                        const compiled = this.server.routes.getRoute((route) => route.url === url && route.method === method)
+                        if (!compiled) {
+                            InternalLogger.warn(`Route with name "${url}" and method "${method.toUpperCase()}" not found!`)
+                            return;
+                        }
+
                         Interpreter.run({
                             obj: {},
                             client: this.#client!,

@@ -6,8 +6,8 @@ exports.default = new forgescript_1.NativeFunction({
     description: "Checks if the request is secure.",
     unwrap: false,
     output: forgescript_1.ArgType.Boolean,
-    async execute(_) {
-        const req = _.getEnvironmentKey("req");
+    async execute(ctx) {
+        const req = ctx.getEnvironmentKey("req");
         return this.success(req?.secure ?? false);
     }
 });
