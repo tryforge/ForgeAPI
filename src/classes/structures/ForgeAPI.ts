@@ -48,7 +48,7 @@ function isWebSocket(data: any): data is ForgeAPIWebSocketOptions {
  * @param route - The route to create the ID for.
  * @returns {string} - The cached route ID.
  */
-function createCachedRouteId(route: ForgeAPIRouteOptions) {
+export function createCachedRouteId(route: ForgeAPIRouteOptions) {
     return `[${route.method}]:(${route.url})`
 }
 

@@ -4,6 +4,12 @@ import { ForgeAPICommandManager } from "../managers/ForgeAPICommandManager";
 import { ForgeAPIRouteOptions, ForgeAPIWebSocketOptions } from "./ForgeAPIRoute";
 import type { WebSocketServer } from "ws";
 /**
+ * Create a cached route ID.
+ * @param route - The route to create the ID for.
+ * @returns {string} - The cached route ID.
+ */
+export declare function createCachedRouteId(route: ForgeAPIRouteOptions): string;
+/**
  * API integration for your ForgeScript client.
  */
 export declare class ForgeAPI extends ForgeExtension {

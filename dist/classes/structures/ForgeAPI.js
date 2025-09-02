@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPI = void 0;
+exports.createCachedRouteId = createCachedRouteId;
 const forgescript_1 = require("@tryforge/forgescript");
 const BackendServer_1 = require("./BackendServer");
 const ForgeAPICommandManager_1 = require("../managers/ForgeAPICommandManager");
