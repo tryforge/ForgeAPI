@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPIRouteManager = void 0;
 const InternalLogger_1 = require("../structures/InternalLogger");
+const ForgeAPI_1 = require("../structures/ForgeAPI");
 const forgescript_1 = require("@tryforge/forgescript");
 /**
  * Class that handles every ForgeAPI route.
@@ -23,7 +24,7 @@ class ForgeAPIRouteManager {
                     code: forgescript_1.Compiler.compile(route.handler)
                 };
             }
-            this.cache.set(route.url, route);
+            this.cache.set((0, ForgeAPI_1.createCachedRouteId)(route), route);
         }
         return this;
     }

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeAPI = void 0;
+exports.createCachedRouteId = createCachedRouteId;
 const forgescript_1 = require("@tryforge/forgescript");
 const BackendServer_1 = require("./BackendServer");
 const ForgeAPICommandManager_1 = require("../managers/ForgeAPICommandManager");
@@ -40,6 +41,14 @@ function isWebSocket(data) {
         && typeof data.name === "string" && ["open", "close", "message", "error"].includes(data.name)
         && Object.prototype.hasOwnProperty.call(data, "handler")
         && (typeof data.handler === "string" || typeof data.handler === "function");
+}
+/**
+ * Create a cached route ID.
+ * @param route - The route to create the ID for.
+ * @returns {string} - The cached route ID.
+ */
+function createCachedRouteId(route) {
+    return `[${route.method}]:(${route.url})`;
 }
 /**
  * API integration for your ForgeScript client.
@@ -87,10 +96,14 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
                     InternalLogger_1.InternalLogger.debug(`Access forbidden for URL: ${url}`);
                     return res.status(403).json({ status: 403, message: "Access Forbidden" });
                 }
-                InternalLogger_1.InternalLogger.debug(`Handling request for URL: "${url}"`);
+                InternalLogger_1.InternalLogger.debug(`Handling request for URL: "${url}" with method: "${method.toUpperCase()}"`);
                 try {
                     if (typeof handler === "string") {
-                        const compiled = this.server.routes.getRoute(url);
+                        const compiled = this.server.routes.getRoute((r) => createCachedRouteId(r) === createCachedRouteId(route) && /* This is additional but anyway. -> */ r.method === method);
+                        if (!compiled) {
+                            InternalLogger_1.InternalLogger.warn(`Route with name "${url}" and method "${method.toUpperCase()}" not found!`);
+                            return;
+                        }
                         forgescript_1.Interpreter.run({
                             obj: {},
                             client: this.#client,
@@ -248,33 +261,6 @@ class ForgeAPI extends forgescript_1.ForgeExtension {
         throw InternalLogger_1.InternalLogger.error('Invalid IP address(es) provided in config!');
     }
     checkCode(req) {
-        /*
-        const authData = this.options.auth
-        if (!authData) return undefined;
-
-        const token = req.headers.authorization ?? ""
-        if (this.options.auth?.bearer) {
-            const code = Array.isArray(this.options.auth?.code) ? this.options.auth?.code[0] : this.options.auth?.code ?? ""
-            const checker = this.checkBearer(token.split("Bearer ")[1] ?? "", code)
-            if (checker === "Error") {
-                InternalLogger.debug("Bearer token validation failed")
-                return false
-            }
-
-            const result = checker.id === this.#client!.user.id
-            InternalLogger.debug(`Bearer token validation result: ${result}`)
-
-            return result
-        } else if (this.options.auth?.code) {
-            const codes = Array.isArray(this.options.auth?.code) ? this.options.auth?.code : [this.options.auth?.code]
-            const result = codes.includes(token)
-
-            InternalLogger.debug(`Code validation result: ${result}`)
-          
-            return result
-        } else {
-            return true
-        }*/
         const authData = this.options.auth;
         if (!authData)
             return undefined;

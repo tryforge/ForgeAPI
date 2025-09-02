@@ -1,5 +1,6 @@
-import type { ForgeAPIRouteOptions  } from "../structures/ForgeAPIRoute"
-import { InternalLogger } from "../structures/InternalLogger"
+import type { ForgeAPIRouteOptions  } from "@structures/ForgeAPIRoute"
+import { InternalLogger } from "@structures/InternalLogger"
+import { createCachedRouteId } from "@structures/ForgeAPI"
 import { Compiler } from "@tryforge/forgescript"
 
 /**
@@ -26,7 +27,7 @@ export class ForgeAPIRouteManager {
                 }
             }
 
-            this.cache.set(route.url, route)
+            this.cache.set(createCachedRouteId(route), route)
         }
         return this
     }

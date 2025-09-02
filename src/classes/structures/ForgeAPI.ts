@@ -44,6 +44,15 @@ function isWebSocket(data: any): data is ForgeAPIWebSocketOptions {
 }
 
 /**
+ * Create a cached route ID.
+ * @param route - The route to create the ID for.
+ * @returns {string} - The cached route ID.
+ */
+export function createCachedRouteId(route: ForgeAPIRouteOptions) {
+    return `[${route.method}]:(${route.url})`
+}
+
+/**
  * API integration for your ForgeScript client.
  */
 export class ForgeAPI extends ForgeExtension {
@@ -86,17 +95,22 @@ export class ForgeAPI extends ForgeExtension {
         this.server.routes.addRoute(...routes)
 
         for (const route of routes) {
-            const { auth, handler, method,url } = route
+            const { auth, handler, method, url } = route
             this.server.app[method.toLowerCase() as RawHTTPMethods](route.url, (req: ExpressRequest, res: ExpressResponse) => {
                 if (auth && !this.isAuthed(req)) {
                     InternalLogger.debug(`Access forbidden for URL: ${url}`)
                     return res.status(403).json({ status: 403, message: "Access Forbidden" })
                 }
 
-                InternalLogger.debug(`Handling request for URL: "${url}"`)
+                InternalLogger.debug(`Handling request for URL: "${url}" with method: "${method.toUpperCase()}"`)
                 try {
                     if (typeof handler === "string") {
-                        const compiled = this.server.routes.getRoute(url)!
+                        const compiled = this.server.routes.getRoute((r) => createCachedRouteId(r) === createCachedRouteId(route) && /* This is additional but anyway. -> */ r.method === method)
+                        if (!compiled) {
+                            InternalLogger.warn(`Route with name "${url}" and method "${method.toUpperCase()}" not found!`)
+                            return;
+                        }
+
                         Interpreter.run({
                             obj: {},
                             client: this.#client!,

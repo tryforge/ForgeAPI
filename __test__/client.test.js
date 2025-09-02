@@ -34,13 +34,4 @@ client.commands.add({
     code: '$pingms'
 })
 
-api.addWebsocketListener({
-    name: 'message',
-    code: '$log[Websocket message received!]'
-})
-
-api.ws.on('connection', function(d) {
-    d.send('Hello!')
-})
-
 client.login(process.env.TOKEN)

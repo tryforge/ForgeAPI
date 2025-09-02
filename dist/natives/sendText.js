@@ -22,8 +22,8 @@ exports.default = new forgescript_1.NativeFunction({
             rest: false
         }
     ],
-    async execute(_, [content, statusCode]) {
-        const res = _.getEnvironmentKey("res");
+    async execute(ctx, [content, statusCode]) {
+        const res = ctx.getEnvironmentKey("res");
         if (statusCode)
             res?.status(statusCode);
         res?.send(content);
