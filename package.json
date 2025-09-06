@@ -27,7 +27,6 @@
     },
     "dependencies": {
         "@hono/node-server": "^1.19.1",
-        "@tryforge/webserver": "^1.0.2",
         "hono": "^4.9.6",
         "jsonwebtoken": "^9.0.2"
     }
