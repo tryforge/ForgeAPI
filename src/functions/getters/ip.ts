@@ -4,6 +4,7 @@ import { getConnInfo } from "@hono/node-server/conninfo"
 
 export default new NativeFunction({
     name: "$ip",
+    version: "2.0.0",
     description: "Retrieves the remote address of the request.",
     unwrap: false,
     output: ArgType.String,

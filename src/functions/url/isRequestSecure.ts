@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$isRequestSecure",
+    version: "2.0.0",
     description: "Checks if the request is secure.",
     unwrap: false,
     output: ArgType.Boolean,

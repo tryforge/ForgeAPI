@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$loadBodyTo",
+    version: "2.0.0",
     description: "Loads the request body to an environment variable.",
     brackets: true,
     unwrap: true,

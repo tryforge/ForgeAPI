@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$getHeader",
+    version: "2.0.0",
     description: "Retrieves a header from the request.",
     brackets: true,
     unwrap: true,

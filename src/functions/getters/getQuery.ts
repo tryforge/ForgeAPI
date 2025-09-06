@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$getQuery",
+    version: "2.0.0",
     description: "Retrieves a query parameter from the request.",
     brackets: false,
     unwrap: true,

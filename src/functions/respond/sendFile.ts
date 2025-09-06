@@ -7,6 +7,7 @@ import { createReadStream } from "fs"
 
 export default new NativeFunction({
     name: "$sendFile",
+    version: "2.0.0",
     description: "Sends a file to the response.",
     brackets: true,
     unwrap: true,

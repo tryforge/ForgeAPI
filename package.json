@@ -4,6 +4,7 @@
     "version": "2.0.0",
     "main": "dist/index.js",
     "scripts": {
+        "docgen": "tsc && typedoc src/index.ts && node dist/docgen",
         "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
         "test": "pnpm build && node dist/__tests__"
     },
@@ -21,6 +22,7 @@
         "@tryforge/forgescript": "^1.4.0",
         "@types/jsonwebtoken": "^9.0.6",
         "@types/node": "^22.10.5",
+        "typedoc": "^0.28.12",
         "typescript": "^5.2.2"
     },
     "dependencies": {

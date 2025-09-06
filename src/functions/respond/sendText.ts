@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$sendText",
+    version: "2.0.0",
     description: "Sends a text to the response.",
     brackets: true,
     unwrap: true,

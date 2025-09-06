@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$fullURL",
+    version: "2.0.0",
     description: "Retrieves the full URL the request.",
     unwrap: false,
     output: ArgType.String,

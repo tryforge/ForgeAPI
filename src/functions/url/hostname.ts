@@ -3,6 +3,7 @@ import { Context } from "../../core"
 
 export default new NativeFunction({
     name: "$hostname",
+    version: "2.0.0",
     description: "Retrieves the hostname.",
     unwrap: false,
     output: ArgType.String,
