@@ -1,23 +1,35 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./classes/managers/ForgeAPICommandManager"), exports);
-__exportStar(require("./classes/managers/ForgeAPIRouteManager"), exports);
-__exportStar(require("./classes/handlers/ForgeAPIEventHandler"), exports);
-__exportStar(require("./classes/structures/BackendServer"), exports);
-__exportStar(require("./classes/structures/ForgeAPIRoute"), exports);
-__exportStar(require("./classes/structures/ForgeAPI"), exports);
+exports.createRoute = exports.QueryType = exports.AuthType = exports.ForgeAPI = void 0;
+const forgescript_1 = require("@tryforge/forgescript");
+const core_1 = require("./core");
+const path_1 = require("path");
+const pkg = require('../package.json');
+class ForgeAPI extends forgescript_1.ForgeExtension {
+    options;
+    name = pkg.name;
+    description = pkg.description;
+    version = pkg.version;
+    app;
+    constructor(options) {
+        super();
+        this.options = options;
+        this.app = new core_1.RouteManager(options.auth);
+    }
+    init(client) {
+        forgescript_1.FunctionManager.load(this.name, (0, path_1.join)(__dirname, "functions"));
+        this.app.registerClient(client);
+        this.app.listen(this.options.port);
+    }
+    load(path) {
+        this.app.load(path);
+    }
+    addRoute(input) { this.app.addRoute(input); }
+    ;
+}
+exports.ForgeAPI = ForgeAPI;
+var core_2 = require("./core");
+Object.defineProperty(exports, "AuthType", { enumerable: true, get: function () { return core_2.AuthType; } });
+Object.defineProperty(exports, "QueryType", { enumerable: true, get: function () { return core_2.QueryType; } });
+Object.defineProperty(exports, "createRoute", { enumerable: true, get: function () { return core_2.createRoute; } });
 //# sourceMappingURL=index.js.map

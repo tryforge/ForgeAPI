@@ -21,7 +21,6 @@ const { ForgeAPI } = require("@tryforge/forge.api")
 
 const api = new ForgeAPI({
   port: number,
-  logLevel?: number,
   auth: {
     bearer?: boolean,
     type: number,
@@ -35,13 +34,12 @@ const client = new ForgeClient({
   "extensions": [api]
 })
 
-api.router.load("path")
+api.load("path")
 ```
 
 | name        | Input   | description | Required |
 |-------------|---------|-------------|----------|
 | port        | number  | The port to open for the api | true     |
-| logLevel    | 0/1/2   | `0 = none` \| `1 = all` \| `2 = debug` | false    |
 | auth.bearer | boolean | If true the client will make a bearer token. | false    |
 | auth.type   | 0/1/2   | `0 = no auth` \| `1 = either token or ip` \| `2 = both token and ip` | true    |
 | auth.code   | string[]  | SecretKey used for non bearer auth | false |
@@ -53,23 +51,22 @@ api.router.load("path")
 module.exports = {
   url: '/string',
   method: "type",
-  auth: boolean,
-  handler: async function (ctx) {
-    <code>
+  auth?: boolean,
+  query?: {
+    optional: Record<string, QueryType>,
+    required: Record<string, QueryType>
   },
+  handler: string | ((ctx: Context, next: Next) => any),
 }
 ```
 
 | name | Input   | description | Required |
 |------|---------|-------------|----------|
 | Url  | /string | The endpoint to appoint this to | true |
-| methode | string | Get / Put / Post / Delete / patch / options / trace / connect | true |
+| method | string | string[] | Get / Put / Post / Delete / patch / options / trace / connect | true |
 | auth | Boolean | If false ForgeAPI wont check for authentication (ip/token) | true |
+| query | { optional: Record<string, QueryType>, required: Record<string, QueryType> } | The query parameters you want the api to check before running the handler | false |
 | handler | string | the code to run if connected successfully | true |
-
-You can also check our endpoint templates at our [template brench].
-
-[template brench]: https://github.com/tryForge/forgeAPI/tree/templates
 
 ## Contributors ✨
 
