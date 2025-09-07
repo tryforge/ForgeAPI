@@ -47,12 +47,15 @@ class RouteManager {
         }
     }
     addRoute(options) {
+        let command = null;
+        if (typeof options.handler == "string") {
+            command = new forgescript_1.BaseCommand({
+                type: "route",
+                code: options.handler,
+            });
+        }
         const handler = async (ctx, next) => {
-            if (typeof options.handler == "string") {
-                const command = new forgescript_1.BaseCommand({
-                    type: "route",
-                    code: options.handler,
-                });
+            if (command) {
                 const promise = await new Promise(async (resolve) => {
                     await forgescript_1.Interpreter.run({
                         obj: {},

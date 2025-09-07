@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$getHeader",
+    version: "2.0.0",
     description: "Retrieves a header from the request.",
     brackets: true,
     unwrap: true,

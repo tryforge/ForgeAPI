@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const conninfo_1 = require("@hono/node-server/conninfo");
 exports.default = new forgescript_1.NativeFunction({
     name: "$ip",
+    version: "2.0.0",
     description: "Retrieves the remote address of the request.",
     unwrap: false,
     output: forgescript_1.ArgType.String,

@@ -6,6 +6,7 @@ import { serve } from "@hono/node-server";
 import { join, resolve } from "path";
 import { AuthManager } from "./authManager";
 import { cwd } from "process";
+import { BlankEnv } from "hono/types";
 
 const isValidFile = (file: string) => file.endsWith('.js') || (file.endsWith('.ts') && !file.endsWith('.d.ts'));
 
@@ -57,13 +58,15 @@ export class RouteManager {
         QR extends Record<string, QueryType> = {},
         QO extends Record<string, QueryType> = {}
     >(options: RouteOptions<T, QR, QO>): void {
+        let command = null;
+        if(typeof options.handler == "string"){
+            command = new BaseCommand({
+                type: "route",
+                code: options.handler,
+            })
+        }
         const handler = async (ctx: Context<T, QR, QO>, next: Next) => {
-            if(typeof options.handler == "string"){
-                const command = new BaseCommand({
-                    type: "route",
-                    code: options.handler,
-                })
-
+            if(command){
                 const promise = await new Promise(async (resolve) => {
                     await Interpreter.run({
                         obj: {},
@@ -77,13 +80,13 @@ export class RouteManager {
 
                 return promise;
             }
-            return options.handler(ctx, next)
+            return (options.handler as Function)(ctx, next)
         }
         
         if(!Array.isArray(options.method)) options.method = [options.method];
         for(const method of options.method){
             const { required, optional } = options.query ?? {};
-            this.app[method.toLowerCase() as Lowercase<HTTPMethod>](options.url, async (c: HonoContext<{Variables: Record<string, any>}, string>, next) => {
+            this.app[method.toLowerCase() as Lowercase<HTTPMethod>](options.url, async (c: HonoContext<BlankEnv, string>, next) => {
                 if(options.auth && !this.authManager.isAuthed(c)){
                     Logger.debug("Unauthorized access to " + options.url);
                     return this.notAuthedHandler(c);

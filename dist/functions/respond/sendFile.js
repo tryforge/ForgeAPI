@@ -5,6 +5,7 @@ const stream_1 = require("stream");
 const fs_1 = require("fs");
 exports.default = new forgescript_1.NativeFunction({
     name: "$sendFile",
+    version: "2.0.0",
     description: "Sends a file to the response.",
     brackets: true,
     unwrap: true,

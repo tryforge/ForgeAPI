@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$loadBodyTo",
+    version: "2.0.0",
     description: "Loads the request body to an environment variable.",
     brackets: true,
     unwrap: true,

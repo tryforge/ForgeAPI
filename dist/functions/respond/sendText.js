@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$sendText",
+    version: "2.0.0",
     description: "Sends a text to the response.",
     brackets: true,
     unwrap: true,

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$getQuery",
+    version: "2.0.0",
     description: "Retrieves a query parameter from the request.",
     brackets: false,
     unwrap: true,
