@@ -15,11 +15,22 @@ export default new NativeFunction({
             type: ArgType.String,
             required: true,
             rest: false
+        },
+        {
+            name: "Path",
+            description: "The path the cookie is scoped to.",
+            type: ArgType.String,
+            required: false,
+            rest: false
         }
     ],
-    async execute(ctx, [name]) {
+    async execute(ctx, [name, path]) {
         const { ctx: c } = ctx.runtime.extras as { ctx: Context }
-        deleteCookie(c, name)
+
+        const options: any = {}
+        if (typeof path === "string") options.path = path
+
+        deleteCookie(c, name, options)
         return this.success()
     }
 })

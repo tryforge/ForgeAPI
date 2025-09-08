@@ -15,11 +15,21 @@ exports.default = new forgescript_1.NativeFunction({
             type: forgescript_1.ArgType.String,
             required: true,
             rest: false
+        },
+        {
+            name: "Path",
+            description: "The path the cookie is scoped to.",
+            type: forgescript_1.ArgType.String,
+            required: false,
+            rest: false
         }
     ],
-    async execute(ctx, [name]) {
+    async execute(ctx, [name, path]) {
         const { ctx: c } = ctx.runtime.extras;
-        (0, cookie_1.deleteCookie)(c, name);
+        const options = {};
+        if (typeof path === "string")
+            options.path = path;
+        (0, cookie_1.deleteCookie)(c, name, options);
         return this.success();
     }
 });

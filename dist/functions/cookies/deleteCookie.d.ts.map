@@ -1,1 +1,1 @@
-{"version":3,"file":"deleteCookie.d.ts","sourceRoot":"","sources":["../../../src/functions/cookies/deleteCookie.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;;;;;;;;AAI/D,wBAoBE"}
+{"version":3,"file":"deleteCookie.d.ts","sourceRoot":"","sources":["../../../src/functions/cookies/deleteCookie.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;;;;;;;;;;;;;;AAI/D,wBA+BE"}
