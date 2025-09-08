@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthType = exports.QueryType = void 0;
-exports.createRoute = createRoute;
+exports.AuthType = exports.createRoute = exports.QueryType = void 0;
 var QueryType;
 (function (QueryType) {
     QueryType["String"] = "string";
@@ -11,6 +10,7 @@ var QueryType;
 })(QueryType || (exports.QueryType = QueryType = {}));
 ;
 function createRoute(input) { return input; }
+exports.createRoute = createRoute;
 ;
 var AuthType;
 (function (AuthType) {

@@ -1,9 +1,9 @@
 import { Context as HonoContext, ErrorHandler, Hono, NotFoundHandler, Next } from "hono";
 import { auth, Context, HTTPMethod, QueryType, RouteOptions } from "./types";
-import { BaseCommand, Compiler, ForgeClient, Interpreter, Logger } from "@tryforge/forgescript";
+import { BaseCommand, ForgeClient, Interpreter, Logger } from "@tryforge/forgescript";
 import { lstatSync, readdirSync } from "fs";
 import { serve } from "@hono/node-server";
-import { join, resolve } from "path";
+import { join } from "path";
 import { AuthManager } from "./authManager";
 import { cwd } from "process";
 import { BlankEnv } from "hono/types";
@@ -58,7 +58,7 @@ export class RouteManager {
         QR extends Record<string, QueryType> = {},
         QO extends Record<string, QueryType> = {}
     >(options: RouteOptions<T, QR, QO>): void {
-        let command = null;
+        let command: BaseCommand<string> | null = null;
         if(typeof options.handler == "string"){
             command = new BaseCommand({
                 type: "route",
@@ -71,10 +71,10 @@ export class RouteManager {
                     await Interpreter.run({
                         obj: {},
                         client: this.client,
-                        data: command.compiled.code,
+                        data: command!.compiled.code,
                         command,
                         extras: { ctx, next, resolve }
-                    })
+                    }).catch(Logger.error)
                     resolve(next())
                 })
 

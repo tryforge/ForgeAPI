@@ -1,16 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
+const cookie_1 = require("hono/cookie");
 exports.default = new forgescript_1.NativeFunction({
-    name: "$getQuery",
+    name: "$getCookie",
     version: "2.0.0",
-    description: "Retrieves a query parameter from the request.",
+    description: "Retrieves a cookie.",
     brackets: true,
     unwrap: true,
     args: [
         {
             name: "Name",
-            description: "The query parameter name.",
+            description: "The name of the cookie.",
             type: forgescript_1.ArgType.String,
             required: true,
             rest: false
@@ -18,7 +19,7 @@ exports.default = new forgescript_1.NativeFunction({
     ],
     async execute(ctx, [name]) {
         const { ctx: c } = ctx.runtime.extras;
-        return this.success(c.query[name]);
+        return this.success((0, cookie_1.getCookie)(c, name));
     }
 });
-//# sourceMappingURL=getQuery.js.map
+//# sourceMappingURL=getCookie.js.map

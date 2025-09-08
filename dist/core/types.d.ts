@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { BlankEnv, Next } from "hono/types";
 import { Context as HonoContext } from "hono";
 import { ForgeClient } from "@tryforge/forgescript";

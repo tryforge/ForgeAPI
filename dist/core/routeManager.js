@@ -63,7 +63,7 @@ class RouteManager {
                         data: command.compiled.code,
                         command,
                         extras: { ctx, next, resolve }
-                    });
+                    }).catch(forgescript_1.Logger.error);
                     resolve(next());
                 });
                 return promise;
