@@ -1,7 +1,5 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript"
 import { Context } from "../../core"
-import { readFile } from "fs/promises"
-import { extname } from "path"
 import { Readable } from "stream"
 import { createReadStream } from "fs"
 
