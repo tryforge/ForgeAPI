@@ -22,11 +22,30 @@ export default new NativeFunction({
             type: ArgType.String,
             required: true,
             rest: false
+        },
+        {
+            name: "Max Age (ms)",
+            description: "How long the cookie should last (milliseconds)",
+            type: ArgType.Number,
+            required: false,
+            rest: false
+        },
+        {
+            name: "Path",
+            description: "The path the cookie is scoped to.",
+            type: ArgType.String,
+            required: false,
+            rest: false
         }
     ],
-    async execute(ctx, [name, value]) {
+    async execute(ctx, [name, value, maxAge, path]) {
         const { ctx: c } = ctx.runtime.extras as { ctx: Context }
-        setCookie(c, name, value)
+
+        const options: any = {}
+        if (typeof maxAge === "number") options.maxAge = maxAge
+        if (typeof path === "string") options.path = path
+
+        setCookie(c, name, value, options)
         return this.success()
     }
 })

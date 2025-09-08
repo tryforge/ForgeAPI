@@ -22,11 +22,30 @@ exports.default = new forgescript_1.NativeFunction({
             type: forgescript_1.ArgType.String,
             required: true,
             rest: false
+        },
+        {
+            name: "Max Age (ms)",
+            description: "How long the cookie should last (milliseconds)",
+            type: forgescript_1.ArgType.Number,
+            required: false,
+            rest: false
+        },
+        {
+            name: "Path",
+            description: "The path the cookie is scoped to.",
+            type: forgescript_1.ArgType.String,
+            required: false,
+            rest: false
         }
     ],
-    async execute(ctx, [name, value]) {
+    async execute(ctx, [name, value, maxAge, path]) {
         const { ctx: c } = ctx.runtime.extras;
-        (0, cookie_1.setCookie)(c, name, value);
+        const options = {};
+        if (typeof maxAge === "number")
+            options.maxAge = maxAge;
+        if (typeof path === "string")
+            options.path = path;
+        (0, cookie_1.setCookie)(c, name, value, options);
         return this.success();
     }
 });
