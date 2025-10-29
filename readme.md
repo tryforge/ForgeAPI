@@ -39,7 +39,7 @@
     ```
 <h2 align='center'>Making routes</h2>
 
-Well, remember the last line in the previous example (`api.load(""path/to/your/application_to_serve)`)?
+Well, remember the last line in the previous example (`api.load("path/to/your/application_to_serve")`)?
 
 So just delve here to understand how the routes of your first API should be like:
    ```js
@@ -65,5 +65,5 @@ This package has been developed with a deep heart by the contributors
 Contributor | Contribution | Conatct
 -|-|-
 Aggelos|Main developer|[Discord](https://discord.com/users/637648484979441706) [GitHub](https://github.com/aggelos-007)
-Lynuux|Testing|[Discord](http://discord.com/users/705306248538488947) [GitHub](https://github.com/Lynnux-useless-codes)
-Aurea| |[Discord](https://discord.com/users/976413539076026388) [GitHub](https://github.com/aurea6)
+Lynnux|Testing|[Discord](http://discord.com/users/705306248538488947) [GitHub](https://github.com/Lynnux-useless-codes)
+Aurea|Readme editor|[Discord](https://discord.com/users/976413539076026388) [GitHub](https://github.com/aurea6)
